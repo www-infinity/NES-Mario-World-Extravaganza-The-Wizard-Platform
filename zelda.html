@@ -21,18 +21,24 @@
     /* Thin sticky nav over the game */
     .zelda-nav{
       position:fixed;top:0;left:0;width:100%;height:40px;
-      background:rgba(0,0,0,0.85);
-      border-bottom:2px solid #fcfc00;
+      background:linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(136,0,21,0.95) 100%);
+      border-bottom:3px solid #ffff00;
+      box-shadow:0 3px 10px rgba(255,255,0,0.5);
       display:flex;align-items:center;gap:4px;
       padding:0 8px;z-index:200;
       font-family:'Press Start 2P',monospace;font-size:7px;
     }
     .zelda-nav a{
-      color:#fcfc00;text-decoration:none;padding:4px 8px;
-      border:1px solid #444;transition:background 0.1s;white-space:nowrap;
+      color:#ffff00;text-decoration:none;padding:4px 8px;
+      border:1px solid #666;transition:all 0.2s;white-space:nowrap;
+      background:rgba(0,0,0,0.3);
     }
-    .zelda-nav a:hover{background:#333;color:#fff;}
-    .zelda-nav .z-title{color:#f8d858;margin-right:8px;font-size:8px;white-space:nowrap;}
+    .zelda-nav a:hover{
+      background:#ffff00;color:#000;
+      box-shadow:0 0 10px #ffff00;
+      transform:translateY(-2px);
+    }
+    .zelda-nav .z-title{color:#ffd700;margin-right:8px;font-size:8px;white-space:nowrap;text-shadow:0 0 10px #ffd700;}
 
     /* ── Game section — full viewport ── */
     #game-section{
@@ -63,19 +69,25 @@
     }
 
     .dpad-btn{
-      background:rgba(0,0,0,0.7);
-      border:2px solid rgba(255,255,255,0.4);
-      color:#fcfc00;
+      background:linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(51,51,51,0.8) 100%);
+      border:3px solid rgba(255,255,0,0.6);
+      color:#ffff00;
       font-family:'Press Start 2P',monospace;
       font-size:14px;
       display:flex;align-items:center;justify-content:center;
       cursor:pointer;user-select:none;
       -webkit-tap-highlight-color:transparent;
-      border-radius:4px;
-      transition:background 0.05s;
+      border-radius:6px;
+      transition:all 0.15s;
       pointer-events:auto;
+      box-shadow:0 0 10px rgba(255,255,0,0.3);
     }
-    .dpad-btn:active,.dpad-btn.pressed{background:rgba(252,252,0,0.3);border-color:#fcfc00;}
+    .dpad-btn:active,.dpad-btn.pressed{
+      background:linear-gradient(135deg, rgba(255,255,0,0.5) 0%, rgba(255,215,0,0.5) 100%);
+      border-color:#ffff00;
+      box-shadow:0 0 20px #ffff00;
+      transform:scale(0.95);
+    }
     .dpad-center{background:rgba(0,0,0,0.3);border:2px solid rgba(255,255,255,0.1);}
 
     .action-btns{
@@ -85,16 +97,26 @@
 
     .action-btn{
       width:56px;height:56px;
-      background:rgba(200,0,0,0.8);
-      border:3px solid rgba(255,255,255,0.5);
+      background:linear-gradient(135deg, rgba(255,0,0,0.9) 0%, rgba(136,0,0,0.9) 100%);
+      border:3px solid rgba(255,255,255,0.7);
       border-radius:50%;
       color:#fff;font-family:'Press Start 2P',monospace;font-size:7px;
       display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
       cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
       pointer-events:auto;
+      box-shadow:0 0 15px rgba(255,0,0,0.5);
+      transition:all 0.15s;
     }
-    .action-btn:active{transform:scale(0.92);background:rgba(200,0,0,1);}
-    .action-btn.start-btn{background:rgba(80,80,80,0.9);border-radius:8px;width:64px;height:28px;}
+    .action-btn:active{
+      transform:scale(0.92);
+      background:linear-gradient(135deg, rgba(255,50,50,1) 0%, rgba(200,0,0,1) 100%);
+      box-shadow:0 0 25px rgba(255,0,0,0.8);
+    }
+    .action-btn.start-btn{
+      background:linear-gradient(135deg, rgba(100,100,100,0.9) 0%, rgba(50,50,50,0.9) 100%);
+      border-radius:8px;width:64px;height:28px;
+      box-shadow:0 0 15px rgba(100,100,100,0.5);
+    }
 
     /* ── Scroll-down hint ── */
     .scroll-hint{
@@ -186,6 +208,8 @@
 <nav class="zelda-nav" aria-label="Site navigation">
   <span class="z-title">🗡️ ZELDA</span>
   <a href="index.html">🏠 HOME</a>
+  <a href="games.html">🎮 GAMES</a>
+  <a href="emulator.html">🕹️ EMULATOR</a>
   <a href="videos.html">🎬 VIDEOS</a>
   <a href="game-genie.html">🕹️ GENIE</a>
   <a href="gallery.html">🖼️ GALLERY</a>
