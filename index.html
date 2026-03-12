@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NES Mario World Extravaganza – The Wizard Platform</title>
+  <meta name="description" content="NES Mario World Extravaganza: The Wizard Platform – free NES gaming, vintage cartoons, image gallery, Game Genie codes, and game builder." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍄</text></svg>" />
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header class="site-header">
+  <div class="mario-sprite-wrap" aria-hidden="true">
+    <!-- CSS pixel art Mario hat icon -->
+    <span style="font-size:40px;" title="It's-a me, Mario!">🍄</span>
+    <span style="font-size:40px;" title="Super Star">⭐</span>
+    <span style="font-size:40px;" title="Fire Flower">🌸</span>
+  </div>
+  <h1 class="site-title">NES Mario World Extravaganza</h1>
+  <p class="site-subtitle">★ THE WIZARD PLATFORM ★ FREE GAMING &amp; MOVIES ★</p>
+  <div class="coin-counter" id="coinCounter">
+    <span class="coin-anim">●</span> COINS: <span id="coinCount">0</span> &nbsp;|&nbsp;
+    🏆 HIGH SCORE: <span id="highScore">000000</span>
+  </div>
+</header>
+
+<!-- ============================================================
+     TICKER
+     ============================================================ -->
+<div class="ticker-wrap" aria-label="News ticker">
+  <div class="ticker-content">
+    ★ WELCOME PLAYER ONE ★ &nbsp;&nbsp; IT'S-A ME, MARIO! ★ &nbsp;&nbsp;
+    WATCH "THE WIZARD" ON ARCHIVE.ORG ★ &nbsp;&nbsp; 
+    GAME GENIE CODES NOW AVAILABLE ★ &nbsp;&nbsp; 
+    BUILD YOUR OWN NES GAME IN THE GAME BUILDER ★ &nbsp;&nbsp;
+    KOJI KONDO COMPOSED THE GREATEST SOUNDTRACKS IN HISTORY ★ &nbsp;&nbsp;
+    PRESS START TO BEGIN ★ &nbsp;&nbsp;
+    ALL YOUR BASE ARE BELONG TO US ★ &nbsp;&nbsp;
+  </div>
+</div>
+
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
+<nav class="main-nav" aria-label="Main navigation">
+  <ul>
+    <li><a href="index.html" class="active">🏠 HOME</a></li>
+    <li><a href="videos.html">🎬 MOVIES &amp; CARTOONS</a></li>
+    <li><a href="gallery.html">🖼️ GALLERY</a></li>
+    <li><a href="game-genie.html">🎮 GAME GENIE</a></li>
+    <li><a href="game-builder.html">🔨 GAME BUILDER</a></li>
+  </ul>
+</nav>
+
+<!-- ============================================================
+     MAIN CONTENT
+     ============================================================ -->
+<main>
+
+  <!-- HUD / PLAYER STATS -->
+  <div class="container">
+    <div class="hud-bar" id="playerHud">
+      <span class="hud-stat">PLAYER: <span id="playerName">GUEST</span></span>
+      <span class="hud-stat">WORLD: <span>1-1</span></span>
+      <span class="hud-stat lives">♥ LIVES: <span id="lifeCount">3</span></span>
+      <span class="hud-stat">SAVES: <span id="saveCount">0</span></span>
+      <button class="nes-btn" onclick="app.saveProgress()" title="Save your progress">💾 SAVE</button>
+      <button class="nes-btn blue" onclick="app.loadProgress()" title="Load saved progress">📂 LOAD</button>
+      <button class="nes-btn yellow" onclick="app.promptPlayerName()" title="Set player name">✏️ NAME</button>
+    </div>
+  </div>
+
+  <!-- FEATURE: THE WIZARD -->
+  <div class="container">
+    <div class="feature-highlight">
+      <h2>🎬 "THE WIZARD" (1989) — FREE ON ARCHIVE.ORG</h2>
+      <p>
+        The movie that introduced the world to Super Mario Bros. 3 before it launched!
+        Watch the classic 1989 Nintendo road-trip movie completely free, legally hosted by the Internet Archive.
+      </p>
+      <a href="https://archive.org/details/thewizard_202001" target="_blank" rel="noopener noreferrer" class="nes-btn">
+        ▶ WATCH NOW — FREE
+      </a>
+      &nbsp;
+      <a href="videos.html" class="nes-btn green">🎮 MORE VIDEOS</a>
+    </div>
+  </div>
+
+  <!-- QUICK LINKS GRID -->
+  <div class="container">
+    <h2 class="section-title">EXPLORE THE PLATFORM</h2>
+    <div class="card-grid">
+
+      <a href="videos.html" class="nes-card" style="text-decoration:none; display:block;">
+        <h3>🎬 MOVIES &amp; CARTOONS</h3>
+        <p>
+          Watch "The Wizard," the Super Mario Bros. cartoon series, Donkey Kong, Captain N,
+          and other classic NES-era cartoons — all free via Archive.org and YouTube.
+        </p>
+        <br>
+        <span class="nes-btn" style="font-size:7px;">ENTER ▶</span>
+      </a>
+
+      <a href="gallery.html" class="nes-card" style="text-decoration:none; display:block;">
+        <h3>🖼️ IMAGE GALLERY</h3>
+        <p>
+          Browse stunning 8-bit to 64-bit Nintendo artwork, Mario sprites, character art,
+          concept art, and official Nintendo graphics from legendary titles.
+        </p>
+        <br>
+        <span class="nes-btn green" style="font-size:7px;">ENTER ▶</span>
+      </a>
+
+      <a href="game-genie.html" class="nes-card" style="text-decoration:none; display:block;">
+        <h3>🕹️ GAME GENIE</h3>
+        <p>
+          Comprehensive Game Genie codes for NES classics: infinite lives, level skips,
+          invincibility, and more. History, how it works, and tips from the pros.
+        </p>
+        <br>
+        <span class="nes-btn" style="background:var(--nes-green);font-size:7px;">ENTER ▶</span>
+      </a>
+
+      <a href="game-builder.html" class="nes-card" style="text-decoration:none; display:block;">
+        <h3>🔨 GAME BUILDER</h3>
+        <p>
+          Design your own NES-style pixel art levels! Place tiles, enemies, and items.
+          Save your creations locally and pick up right where you left off.
+        </p>
+        <br>
+        <span class="nes-btn blue" style="font-size:7px;">ENTER ▶</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- NES HISTORY -->
+  <div class="container">
+    <h2 class="section-title">NINTENDO HISTORY</h2>
+    <div class="card-grid">
+      <div class="nes-card">
+        <h3>🗓️ THE NES STORY (1983–1995)</h3>
+        <p>
+          Nintendo released the Famicom in Japan on July 15, 1983, and the Nintendo Entertainment
+          System in North America on October 18, 1985. It saved the video game industry after the
+          crash of 1983 and established Nintendo as the dominant force in gaming.<br><br>
+          Key milestones: Donkey Kong (1981), Super Mario Bros. (1985), The Legend of Zelda (1986),
+          Metroid (1986), Mega Man (1987), Contra (1987), Tetris (1984), and hundreds more.
+        </p>
+      </div>
+      <div class="nes-card">
+        <h3>🎵 KOJI KONDO — THE MAESTRO</h3>
+        <p>
+          Koji Kondo composed the iconic music for Super Mario Bros., The Legend of Zelda,
+          and many other Nintendo classics using the NES's 5-channel audio chip (2A03).<br><br>
+          His Super Mario Bros. theme is the most recognized piece of video game music in
+          history, recognized by over 97% of Americans in surveys. The underwater theme,
+          castle theme, and underground theme are equally legendary.
+        </p>
+      </div>
+      <div class="nes-card">
+        <h3>🌟 MARIO THROUGH THE AGES</h3>
+        <p>
+          From Jumpman in Donkey Kong (1981) to Super Mario Bros. (1985), Super Mario Bros. 3
+          (1988), and beyond — Mario has starred in over 200 games, sold over 800 million
+          copies worldwide, and become the world's most recognizable video game character.<br><br>
+          Miyamoto's masterpiece continues to evolve while honoring its 8-bit roots.
+        </p>
+      </div>
+      <div class="nes-card">
+        <h3>💡 DID YOU KNOW?</h3>
+        <ul>
+          <li>The NES cartridge holds a 72-pin connector.</li>
+          <li>Blowing on cartridges actually caused corrosion over time.</li>
+          <li>Super Mario Bros. 3 was first shown in "The Wizard" (1989).</li>
+          <li>The NES had 61.91 million units sold worldwide.</li>
+          <li>Shigeru Miyamoto created Mario, Donkey Kong, and Zelda.</li>
+          <li>The NES CPU runs at 1.79 MHz.</li>
+          <li>Game Genie was created by Codemasters, sold by Galoob.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED NES GAMES INSIGHTS -->
+  <div class="container">
+    <h2 class="section-title">GAME INSIGHTS &amp; PRO TIPS</h2>
+    <div class="card-grid">
+
+      <div class="nes-card">
+        <h3>🔴 SUPER MARIO BROS.</h3>
+        <p><strong style="color:var(--nes-yellow)">WARP ZONES:</strong> In World 1-2, run on top of the exit pipe area ceiling to reach the warp zone for Worlds 2, 3, or 4.<br><br>
+        <strong style="color:var(--nes-yellow)">INFINITE LIVES:</strong> In 3-1, find the two Goombas near the staircase and bounce on them repeatedly with the correct timing for 1-up stacks.<br><br>
+        <strong style="color:var(--nes-yellow)">MINUS WORLD:</strong> In 1-2, jump through the wall to the left of the warp zone pipe for World -1 (an infinite underwater level).</p>
+      </div>
+
+      <div class="nes-card">
+        <h3>⭐ SUPER MARIO BROS. 3</h3>
+        <p><strong style="color:var(--nes-yellow)">WARP WHISTLES:</strong> World 1-3 (White block secret), World 1 Fortress (fly past the boss room), World 2 Toad House hint.<br><br>
+        <strong style="color:var(--nes-yellow)">P-WING:</strong> Fly through the entire level without landing once.<br><br>
+        <strong style="color:var(--nes-yellow)">TANUKI SUIT:</strong> Statue form grants invincibility for 5 seconds — great for boss rooms.<br><br>
+        <strong style="color:var(--nes-yellow)">CARD GAME:</strong> Matching N-cards gives you 2, 3, or 5 extra lives depending on the match.</p>
+      </div>
+
+      <div class="nes-card">
+        <h3>🗡️ THE LEGEND OF ZELDA</h3>
+        <p><strong style="color:var(--nes-yellow)">2ND QUEST:</strong> Enter the name "ZELDA" to start on the harder second quest immediately.<br><br>
+        <strong style="color:var(--nes-yellow)">MONEY TRICK:</strong> Gamble your money, then hold reset when you lose to restore it.<br><br>
+        <strong style="color:var(--nes-yellow)">LEVEL 9 SHORTCUT:</strong> You can access Death Mountain without completing all dungeons if you have the Power Bracelet.<br><br>
+        <strong style="color:var(--nes-yellow)">SWORD BEAM:</strong> At full health, your sword fires a beam — always keep your hearts topped up!</p>
+      </div>
+
+      <div class="nes-card">
+        <h3>🔫 CONTRA</h3>
+        <p><strong style="color:var(--nes-yellow)">KONAMI CODE:</strong> ↑↑↓↓←→←→BA + START = 30 lives! This is THE most famous cheat code in video game history.<br><br>
+        <strong style="color:var(--nes-yellow)">SPREAD GUN:</strong> The most overpowered weapon — especially devastating against bosses when fired at close range.<br><br>
+        <strong style="color:var(--nes-yellow)">2-PLAYER TIP:</strong> Player 2 can be sacrificed to let Player 1 safely collect power-ups — teamwork!</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PIXEL DIVIDER -->
+  <div class="pixel-divider">
+    ═══════════════════════════════════════════
+  </div>
+
+  <!-- MARIO GRAPHICS SHOWCASE -->
+  <div class="container">
+    <h2 class="section-title">★ MARIO GRAPHICS SHOWCASE ★</h2>
+    <div class="info-box">
+      <strong style="color:var(--nes-yellow)">About This Collection:</strong> The graphics below represent the evolution of Mario from
+      8-bit NES pixels through 16-bit SNES and beyond. All imagery referenced is from official
+      Nintendo sources and public domain / fair use educational content.
+    </div>
+    <div style="text-align:center; margin: 24px 0;">
+      <!-- ASCII pixel art Mario -->
+      <pre style="color:var(--nes-red); font-size:8px; line-height:1.4; display:inline-block; text-align:left;">
+    ██████
+  ██▓▓▓▓▓▓██
+  ████████████
+  ██▓██▓▓▓████
+  ██▓█████████
+    ████████
+  ████████████
+██  ██████  ██
+████████████████
+████████████████
+  ████  ████
+  ████  ████
+██████  ██████</pre>
+      <pre style="color:var(--nes-sky); font-size:8px; line-height:1.4; display:inline-block; text-align:left; margin-left:32px;">
+  ██████████
+██▓▓▓▓▓▓▓▓▓▓██
+██████████████
+  ██████████
+████████████████
+██  ██████████  ██
+████████████████
+  ████  ████
+  ████  ████
+██████  ██████</pre>
+      <p style="margin-top:16px; font-size:8px; color:var(--nes-gray)">
+        [Mario] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [Luigi]
+      </p>
+    </div>
+    <div style="text-align:center;">
+      <a href="gallery.html" class="nes-btn">🖼️ VIEW FULL GALLERY</a>
+    </div>
+  </div>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <p>
+    NES Mario World Extravaganza — The Wizard Platform<br>
+    Built with <span class="heart">♥</span> for Nintendo fans everywhere<br>
+    <br>
+    All Nintendo characters, games, and logos are trademarks of Nintendo Co., Ltd.<br>
+    This fan site is not affiliated with, endorsed by, or sponsored by Nintendo.<br>
+    Videos linked via Archive.org are used under fair use / public archive provisions.<br>
+    <br>
+    <a href="https://archive.org/details/thewizard_202001" target="_blank" rel="noopener noreferrer">The Wizard (1989) on Archive.org</a>
+    &nbsp;|&nbsp;
+    <a href="https://www.nintendo.com" target="_blank" rel="noopener noreferrer">Nintendo Official Site</a>
+    &nbsp;|&nbsp;
+    <a href="game-genie.html">Game Genie</a>
+    &nbsp;|&nbsp;
+    <a href="game-builder.html">Game Builder</a>
+  </p>
+  <p style="margin-top:16px;">
+    <span class="blink">█</span> READY PLAYER ONE <span class="blink">█</span>
+  </p>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
