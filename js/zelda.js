@@ -17,6 +17,7 @@
   const GH = ROWS * TILE;   // 176
 
   let scale = 3, ox = 0, oy = 0;
+  let bgStars = []; // Background stars for visual polish
 
   function resize() {
     canvas.width  = canvas.clientWidth  || window.innerWidth;
@@ -26,6 +27,19 @@
       Math.floor(Math.min(canvas.width / GW, canvas.height / GH))));
     ox = Math.floor((canvas.width  - GW * scale) / 2);
     oy = Math.floor((canvas.height - GH * scale) / 2);
+
+    // Initialize background stars for polish
+    if(bgStars.length === 0) {
+      for(let i = 0; i < 100; i++) {
+        bgStars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: 1 + Math.random() * 2,
+          alpha: 0.3 + Math.random() * 0.4,
+          twinkle: Math.random() * Math.PI * 2
+        });
+      }
+    }
   }
   window.addEventListener('resize', resize);
 
@@ -215,8 +229,17 @@
   // ── Particles ────────────────────────────────────────────────────────
   function spark(x,y,col,n){
     for(let i=0;i<n;i++){
-      const a=Math.random()*Math.PI*2,s=30+Math.random()*80;
-      particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,color:col,life:0.4+Math.random()*0.3,maxLife:0.7,alpha:1,size:2+Math.random()*2});
+      const a=Math.random()*Math.PI*2,s=40+Math.random()*120;
+      particles.push({
+        x,y,
+        vx:Math.cos(a)*s,
+        vy:Math.sin(a)*s,
+        color:col,
+        life:0.5+Math.random()*0.4,
+        maxLife:0.8,
+        alpha:1,
+        size:3+Math.random()*3
+      });
     }
   }
 
@@ -390,7 +413,18 @@
 
   // ── Rendering ────────────────────────────────────────────────────────
   function render(){
+    // Background with stars
     ctx.fillStyle='#000';ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    // Draw twinkling stars in background
+    bgStars.forEach(star => {
+      star.twinkle += 0.05;
+      const twinkleAlpha = star.alpha * (0.7 + 0.3 * Math.sin(star.twinkle));
+      ctx.globalAlpha = twinkleAlpha;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(star.x - star.size/2, star.y - star.size/2, star.size, star.size);
+    });
+    ctx.globalAlpha = 1;
 
     // Tiles
     for(let ty=0;ty<ROWS;ty++)
@@ -418,18 +452,29 @@
       else drawMoblin(ex,ey,e);
     });
 
-    // Projectiles
+    // Projectiles with glow
     projectiles.forEach(p=>{
       const px=ox+p.x*scale,py=oy+p.y*scale;
+      // Glow effect
+      ctx.globalAlpha=0.3;
+      ctx.fillStyle=C.OCT_PROJ;
+      ctx.fillRect(px-8*scale,py-8*scale,16*scale,16*scale);
+      ctx.globalAlpha=1;
       ctx.fillStyle=C.OCT_PROJ;ctx.fillRect(px-4*scale,py-4*scale,8*scale,8*scale);
       ctx.fillStyle=C.FX_W;ctx.fillRect(px-2*scale,py-2*scale,4*scale,4*scale);
     });
 
-    // Particles
+    // Particles with enhanced rendering
     particles.forEach(p=>{
       ctx.globalAlpha=p.alpha;ctx.fillStyle=p.color;
       const sz=p.size*scale;
-      ctx.fillRect(ox+p.x*scale-sz/2,oy+p.y*scale-sz/2,sz,sz);
+      const px = ox+p.x*scale-sz/2;
+      const py = oy+p.y*scale-sz/2;
+      // Add glow to particles
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = p.color;
+      ctx.fillRect(px, py, sz, sz);
+      ctx.shadowBlur = 0;
     });
     ctx.globalAlpha=1;
 
@@ -443,43 +488,83 @@
 
     // Start screen
     if(!gameStarted){
-      ctx.fillStyle='rgba(0,0,0,0.75)';ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='rgba(0,0,0,0.85)';ctx.fillRect(0,0,canvas.width,canvas.height);
       ctx.textAlign='center';
-      ctx.fillStyle='#f8d858';ctx.font=`bold ${Math.max(14,scale*6)}px "Press Start 2P",monospace`;
+      // Add glow to title
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = '#f8d858';
+      ctx.fillStyle='#f8d858';ctx.font=`bold ${Math.max(16,scale*7)}px "Press Start 2P",monospace`;
       ctx.fillText('THE LEGEND OF ZELDA',canvas.width/2,canvas.height/2-36);
-      ctx.fillStyle='#fcfc00';ctx.font=`${Math.max(9,scale*3)}px "Press Start 2P",monospace`;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = '#fcfc00';
+      ctx.fillStyle='#fcfc00';ctx.font=`${Math.max(10,scale*4)}px "Press Start 2P",monospace`;
       ctx.fillText('▶ PRESS START OR TAP',canvas.width/2,canvas.height/2+8);
-      ctx.fillStyle='#aaa';ctx.font=`${Math.max(6,scale*2)}px "Press Start 2P",monospace`;
-      ctx.fillText('ARROWS/WASD · Z/X/SPACE=SWORD',canvas.width/2,canvas.height/2+44);
+      ctx.shadowBlur = 0;
+      ctx.fillStyle='#aaa';ctx.font=`${Math.max(7,scale*2.5)}px "Press Start 2P",monospace`;
+      ctx.fillText('ARROWS/WASD · Z/X/SPACE=SWORD',canvas.width/2,canvas.height/2+48);
     }
 
     // Paused
     if(gamePaused&&gameStarted){
-      ctx.fillStyle='rgba(0,0,0,0.6)';ctx.fillRect(0,0,canvas.width,canvas.height);
-      ctx.textAlign='center';ctx.fillStyle='#fcfc00';
-      ctx.font=`bold ${Math.max(12,scale*5)}px "Press Start 2P",monospace`;
+      ctx.fillStyle='rgba(0,0,0,0.7)';ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.textAlign='center';
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = '#fcfc00';
+      ctx.fillStyle='#fcfc00';
+      ctx.font=`bold ${Math.max(14,scale*6)}px "Press Start 2P",monospace`;
       ctx.fillText('PAUSED',canvas.width/2,canvas.height/2);
-      ctx.fillStyle='#fff';ctx.font=`${Math.max(8,scale*2)}px "Press Start 2P",monospace`;
-      ctx.fillText('P / ESC to resume',canvas.width/2,canvas.height/2+30);
+      ctx.shadowBlur = 0;
+      ctx.fillStyle='#fff';ctx.font=`${Math.max(9,scale*3)}px "Press Start 2P",monospace`;
+      ctx.fillText('P / ESC to resume',canvas.width/2,canvas.height/2+36);
     }
   }
 
   function drawHUD(){
-    const hudH=28*scale;
-    ctx.fillStyle=C.HUD_BG;ctx.fillRect(ox,oy-hudH,GW*scale,hudH);
+    const hudH=32*scale;
+    // HUD background with gradient
+    const grad = ctx.createLinearGradient(ox, oy-hudH, ox, oy);
+    grad.addColorStop(0, 'rgba(0,0,0,0.95)');
+    grad.addColorStop(1, 'rgba(0,0,0,0.85)');
+    ctx.fillStyle=grad;
+    ctx.fillRect(ox,oy-hudH,GW*scale,hudH);
+
+    // Add subtle border
+    ctx.strokeStyle='rgba(252,252,0,0.5)';
+    ctx.lineWidth=2;
+    ctx.strokeRect(ox,oy-hudH,GW*scale,hudH);
+
+    // Rupee counter with glow
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = C.RUP_G;
     ctx.fillStyle=C.RUP_G;ctx.textAlign='left';
-    ctx.font=`${scale*5}px "Press Start 2P",monospace`;
-    ctx.fillText(`◆×${String(link.rupees).padStart(3,'0')}`,ox+4*scale,oy-16*scale);
+    ctx.font=`${scale*6}px "Press Start 2P",monospace`;
+    ctx.fillText(`◆×${String(link.rupees).padStart(3,'0')}`,ox+6*scale,oy-16*scale);
+    ctx.shadowBlur = 0;
+
+    // Position indicator
     ctx.fillStyle=C.HUD_TXT;ctx.textAlign='center';
-    ctx.font=`${scale*4}px "Press Start 2P",monospace`;
+    ctx.font=`${scale*5}px "Press Start 2P",monospace`;
     ctx.fillText(`${sX}-${sY}`,ox+GW*scale/2,oy-14*scale);
-    // Hearts
-    const hs=7*scale,tot=link.maxHealth/2,full=Math.floor(link.health/2),half=link.health%2===1;
+
+    // Hearts with improved rendering
+    const hs=8*scale,tot=link.maxHealth/2,full=Math.floor(link.health/2),half=link.health%2===1;
     for(let i=0;i<tot;i++){
-      const hx=ox+GW*scale-(tot-i)*(hs+scale)-4*scale,hy=oy-hudH+8*scale;
-      ctx.fillStyle=i<full?C.HEART_F:(i===full&&half?'#ff8888':C.HEART_E);
+      const hx=ox+GW*scale-(tot-i)*(hs+2*scale)-6*scale,hy=oy-hudH+10*scale;
+      if(i<full){
+        ctx.shadowBlur = 5;
+        ctx.shadowColor = C.HEART_F;
+        ctx.fillStyle=C.HEART_F;
+      } else if(i===full&&half){
+        ctx.shadowBlur = 3;
+        ctx.shadowColor = '#ff8888';
+        ctx.fillStyle='#ff8888';
+      } else {
+        ctx.shadowBlur = 0;
+        ctx.fillStyle=C.HEART_E;
+      }
       drawHeart(hx,hy,hs);
     }
+    ctx.shadowBlur = 0;
   }
 
   function drawHeart(hx,hy,sz){
