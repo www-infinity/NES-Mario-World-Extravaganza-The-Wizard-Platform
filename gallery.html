@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>NES Image Gallery – The Wizard Platform</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖼️</text></svg>"/>
+  <style>
+    .gallery-section { margin: 32px 0; }
+    .gallery-heading { color: var(--nes-yellow); font-size: 10px; margin-bottom: 16px; padding-left: 12px; border-left: 4px solid var(--nes-red); }
+    .cover-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+    }
+    .cover-item {
+      background: #000;
+      border: 3px solid #333;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.1s, border-color 0.1s, box-shadow 0.1s;
+    }
+    .cover-item:hover {
+      transform: translate(-2px,-2px);
+      border-color: #fcfc00;
+      box-shadow: 4px 4px 0 #fcfc00;
+    }
+    .cover-item img {
+      width: 100%; display: block;
+      aspect-ratio: 3/4; object-fit: cover;
+      image-rendering: pixelated;
+    }
+    .cover-item .cname {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 5px; color: #fcfc00;
+      padding: 5px; text-align: center;
+      background: #0d0d2b; line-height: 1.8;
+    }
+    /* Lightbox */
+    .lightbox {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.95); z-index: 9000;
+      align-items: center; justify-content: center; padding: 16px;
+    }
+    .lightbox.open { display: flex; flex-direction: column; }
+    .lightbox img { max-width: 90vw; max-height: 75vh; object-fit: contain; border: 4px solid #fcfc00; }
+    .lightbox p { font-family: 'Press Start 2P', monospace; font-size: 8px; color: #fcfc00; margin-top: 12px; text-align: center; }
+    .lightbox-close {
+      position: absolute; top: 12px; right: 12px;
+      background: #d80000; color: #fff; border: 2px solid #fff;
+      font-family: 'Press Start 2P', monospace; font-size: 10px;
+      padding: 6px 12px; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<nav class="main-nav" aria-label="Main navigation">
+  <ul>
+    <li><a href="index.html">🏠 HOME</a></li>
+    <li><a href="zelda.html">🗡️ ZELDA</a></li>
+    <li><a href="videos.html">🎬 VIDEOS</a></li>
+    <li><a href="gallery.html" class="active">🖼️ GALLERY</a></li>
+    <li><a href="games.html">🎮 GAMES</a></li>
+    <li><a href="game-genie.html">🕹️ GENIE</a></li>
+    <li><a href="game-builder.html">🔨 BUILD</a></li>
+    <li><a href="ai.html">🤖 AI</a></li>
+  </ul>
+</nav>
+<div class="site-header" style="background:linear-gradient(180deg,#1a0050 0%,#3d0090 60%,#7800bc 100%);border-bottom:4px solid #f878f8;">
+  <h1 class="site-title" style="color:#f8d858;">🖼️ NES IMAGE GALLERY</h1>
+  <p class="site-subtitle">★ 8-BIT TO 64-BIT ★ MARIO ★ ZELDA ★ 742 COVERS ★</p>
+</div>
+<main>
+  <div class="container">
+    <div class="info-box" style="border-left-color:#7800bc;">
+      All box art images sourced from the
+      <a href="https://archive.org/details/nes_classic_box_art" target="_blank" rel="noopener noreferrer">Archive.org NES Classic Box Art (USA) 742 Covers</a> collection.
+      Click any image to enlarge. Images are © their respective publishers.
+    </div>
+
+    <!-- Mario series -->
+    <div class="gallery-section">
+      <h2 class="gallery-heading">🍄 SUPER MARIO SERIES</h2>
+      <div class="cover-grid" id="mario-grid"></div>
+    </div>
+
+    <!-- Zelda series -->
+    <div class="gallery-section">
+      <h2 class="gallery-heading">🗡️ THE LEGEND OF ZELDA SERIES</h2>
+      <div class="cover-grid" id="zelda-grid"></div>
+    </div>
+
+    <!-- Mega Man -->
+    <div class="gallery-section">
+      <h2 class="gallery-heading">🤖 MEGA MAN SERIES</h2>
+      <div class="cover-grid" id="mega-grid"></div>
+    </div>
+
+    <!-- Castlevania -->
+    <div class="gallery-section">
+      <h2 class="gallery-heading">🏰 CASTLEVANIA SERIES</h2>
+      <div class="cover-grid" id="castle-grid"></div>
+    </div>
+
+    <!-- Action classics -->
+    <div class="gallery-section">
+      <h2 class="gallery-heading">🔫 ACTION CLASSICS</h2>
+      <div class="cover-grid" id="action-grid"></div>
+    </div>
+
+    <!-- Sports / Misc -->
+    <div class="gallery-section">
+      <h2 class="gallery-heading">🏆 SPORTS &amp; MORE</h2>
+      <div class="cover-grid" id="sports-grid"></div>
+    </div>
+
+    <div style="text-align:center;margin:32px 0;">
+      <a href="https://archive.org/details/nes_classic_box_art" target="_blank" rel="noopener noreferrer" class="nes-btn">
+        📦 SEE ALL 742 COVERS ON ARCHIVE.ORG
+      </a>
+      &nbsp;
+      <a href="games.html" class="nes-btn green">🎮 FULL GAMES LIBRARY</a>
+    </div>
+  </div>
+</main>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true">
+  <button class="lightbox-close" id="lb-close" aria-label="Close lightbox">✕</button>
+  <img id="lb-img" src="" alt=""/>
+  <p id="lb-caption"></p>
+</div>
+
+<footer class="site-footer">
+  <p>
+    Images from <a href="https://archive.org/details/nes_classic_box_art" target="_blank" rel="noopener noreferrer">Archive.org NES Classic Box Art</a> collection.<br>
+    All artwork © respective publishers. Fan tribute — not for commercial use.<br>
+    <a href="index.html">🏠 Home</a> | <a href="zelda.html">🗡️ Zelda Game</a> | <a href="games.html">🎮 All Games</a>
+  </p>
+</footer>
+<script src="js/app.js"></script>
+<script>
+(function(){
+  const BASE = 'https://archive.org/download/nes_classic_box_art/NES%20Box%20Art%20%28USA%29%20742%20Covers/';
+  const COVERS = {
+    mario: [
+      ['Super Mario Bros.',     'Super Mario Bros. (USA).jpg'],
+      ['Super Mario Bros. 2',   'Super Mario Bros. 2 (USA).jpg'],
+      ['Super Mario Bros. 3',   'Super Mario Bros. 3 (USA).jpg'],
+      ['Dr. Mario',             'Dr. Mario (USA).jpg'],
+      ['Mario Bros.',           'Mario Bros. (USA).jpg'],
+      ['Donkey Kong',           'Donkey Kong (USA).jpg'],
+      ['Donkey Kong Jr.',       'Donkey Kong Jr. (USA).jpg'],
+      ['Donkey Kong 3',         'Donkey Kong 3 (USA).jpg'],
+      ['Wrecking Crew',         'Wrecking Crew (USA).jpg'],
+    ],
+    zelda: [
+      ['The Legend of Zelda',   'Legend of Zelda, The (USA).jpg'],
+      ['Zelda II Adv of Link',  'Zelda II - The Adventure of Link (USA).jpg'],
+    ],
+    mega: [
+      ['Mega Man',              'Mega Man (USA).jpg'],
+      ['Mega Man 2',            'Mega Man 2 (USA).jpg'],
+      ['Mega Man 3',            'Mega Man 3 (USA).jpg'],
+      ['Mega Man 4',            'Mega Man 4 (USA).jpg'],
+      ['Mega Man 5',            'Mega Man 5 (USA).jpg'],
+      ['Mega Man 6',            'Mega Man 6 (USA).jpg'],
+    ],
+    castle: [
+      ['Castlevania',           'Castlevania (USA).jpg'],
+      ['Castlevania II',        'Castlevania II - Simon\'s Quest (USA).jpg'],
+      ['Castlevania III',       'Castlevania III - Dracula\'s Curse (USA).jpg'],
+    ],
+    action: [
+      ['Contra',                'Contra (USA).jpg'],
+      ['Bionic Commando',       'Bionic Commando (USA).jpg'],
+      ['Ninja Gaiden',          'Ninja Gaiden (USA).jpg'],
+      ['Ninja Gaiden II',       'Ninja Gaiden II - The Dark Sword of Chaos (USA).jpg'],
+      ['Battletoads',           'Battletoads (USA).jpg'],
+      ['DuckTales',             'DuckTales (USA).jpg'],
+      ['Chip n Dale',           'Chip \'n Dale Rescue Rangers (USA).jpg'],
+      ['Ghosts n Goblins',      'Ghosts \'n Goblins (USA).jpg'],
+      ['Metroid',               'Metroid (USA).jpg'],
+      ['Kirby\'s Adventure',    'Kirby\'s Adventure (USA).jpg'],
+      ['Blaster Master',        'Blaster Master (USA).jpg'],
+      ['Teenage Mutant Ninja Turtles','Teenage Mutant Ninja Turtles (USA).jpg'],
+    ],
+    sports: [
+      ['Mike Tyson\'s Punch-Out!!','Mike Tyson\'s Punch-Out!! (USA).jpg'],
+      ['Excitebike',            'Excitebike (USA).jpg'],
+      ['Tecmo Super Bowl',      'Tecmo Super Bowl (USA).jpg'],
+      ['Ice Hockey',            'Ice Hockey (USA).jpg'],
+      ['Tetris',                'Tetris (USA).jpg'],
+      ['Final Fantasy',         'Final Fantasy (USA).jpg'],
+    ],
+  };
+
+  const lb    = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbCap = document.getElementById('lb-caption');
+
+  function buildGrid(gridId, covers){
+    const grid = document.getElementById(gridId);
+    if(!grid) return;
+    grid.innerHTML = covers.map(([name, file]) => {
+      const url = BASE + encodeURIComponent(file);
+      return `<div class="cover-item" role="button" tabindex="0" aria-label="${name}">
+        <img src="${url}" alt="${name}" loading="lazy"
+             onerror="this.parentElement.style.display='none'"/>
+        <div class="cname">${name}</div>
+      </div>`;
+    }).join('');
+    grid.querySelectorAll('.cover-item').forEach((item, i) => {
+      const open = () => {
+        const img = item.querySelector('img');
+        lbImg.src = img.src; lbImg.alt = img.alt;
+        lbCap.textContent = covers[i][0];
+        lb.classList.add('open');
+        document.getElementById('lb-close').focus();
+      };
+      item.addEventListener('click', open);
+      item.addEventListener('keydown', e => { if(e.key==='Enter') open(); });
+    });
+  }
+
+  Object.entries(COVERS).forEach(([key, covers]) => buildGrid(key+'-grid', covers));
+
+  document.getElementById('lb-close').addEventListener('click', () => lb.classList.remove('open'));
+  lb.addEventListener('click', e => { if(e.target === lb) lb.classList.remove('open'); });
+  document.addEventListener('keydown', e => { if(e.key==='Escape') lb.classList.remove('open'); });
+})();
+</script>
+</body>
+</html>

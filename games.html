@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>NES Games Library – 742 Box Art Covers – The Wizard Platform</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>"/>
+  <style>
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .game-card {
+      background: #0d0d2b;
+      border: 3px solid #444;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s, border-color 0.1s;
+      position: relative;
+    }
+    .game-card:hover {
+      transform: translate(-2px,-2px);
+      box-shadow: 4px 4px 0 #fcfc00;
+      border-color: #fcfc00;
+      z-index: 2;
+    }
+    .game-card img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      image-rendering: pixelated;
+    }
+    .game-card .game-name {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 6px;
+      color: #fcfc00;
+      padding: 6px 6px 8px;
+      text-align: center;
+      background: #000;
+      line-height: 1.8;
+      border-top: 2px solid #333;
+    }
+    .game-modal-bg {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 9000;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .game-modal-bg.open { display: flex; }
+    .game-modal {
+      background: #0d0d2b;
+      border: 4px solid #fcfc00;
+      max-width: 600px;
+      width: 100%;
+      padding: 24px;
+      position: relative;
+      box-shadow: 8px 8px 0 #000;
+    }
+    .game-modal img { width: 100%; max-height: 300px; object-fit: contain; margin-bottom: 16px; }
+    .game-modal h2 { color: #fcfc00; font-size: 10px; margin-bottom: 12px; }
+    .game-modal p { font-size: 7px; color: #fff; line-height: 2.2; }
+    .modal-close {
+      position: absolute; top: 8px; right: 8px;
+      background: #d80000; color: #fff; border: 2px solid #fff;
+      font-family: 'Press Start 2P', monospace; font-size: 8px;
+      padding: 4px 8px; cursor: pointer;
+    }
+    .search-bar {
+      display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap;
+    }
+    #game-search {
+      flex: 1; min-width: 200px;
+      background: #000; border: 3px solid #fcfc00; color: #fff;
+      font-family: 'Press Start 2P', monospace; font-size: 8px;
+      padding: 8px 12px; outline: none;
+    }
+    #game-search::placeholder { color: #555; }
+    .filter-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+    .filter-btn {
+      background: #1a1a3e; border: 2px solid #444; color: #aaa;
+      font-family: 'Press Start 2P', monospace; font-size: 7px;
+      padding: 6px 10px; cursor: pointer; transition: 0.1s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: #d80000; border-color: #d80000; color: #fff;
+    }
+    #games-count { font-size: 7px; color: #888; margin: 8px 0 16px; }
+  </style>
+</head>
+<body>
+<nav class="main-nav" aria-label="Main navigation">
+  <ul>
+    <li><a href="index.html">🏠 HOME</a></li>
+    <li><a href="zelda.html">🗡️ ZELDA</a></li>
+    <li><a href="videos.html">🎬 VIDEOS</a></li>
+    <li><a href="gallery.html">🖼️ GALLERY</a></li>
+    <li><a href="games.html" class="active">🎮 GAMES</a></li>
+    <li><a href="game-genie.html">🕹️ GENIE</a></li>
+    <li><a href="game-builder.html">🔨 BUILD</a></li>
+    <li><a href="ai.html">🤖 AI</a></li>
+  </ul>
+</nav>
+
+<div class="site-header">
+  <h1 class="site-title">🎮 NES GAMES LIBRARY</h1>
+  <p class="site-subtitle">★ 742 BOX ART COVERS FROM ARCHIVE.ORG ★ EVERY NES TITLE ★</p>
+</div>
+
+<main>
+  <div class="container">
+    <div class="info-box">
+      <strong style="color:var(--nes-yellow)">742 NES Box Art Covers</strong> — sourced from the
+      <a href="https://archive.org/details/nes_classic_box_art" target="_blank" rel="noopener noreferrer">Archive.org NES Classic Box Art collection</a>.
+      Click any game to see details and find free resources. All images © their respective publishers.
+    </div>
+
+    <div class="search-bar">
+      <input type="search" id="game-search" placeholder="SEARCH GAMES..." aria-label="Search games"/>
+      <div class="filter-btns">
+        <button class="filter-btn active" data-filter="all">ALL</button>
+        <button class="filter-btn" data-filter="mario">MARIO</button>
+        <button class="filter-btn" data-filter="zelda">ZELDA</button>
+        <button class="filter-btn" data-filter="mega">MEGA MAN</button>
+        <button class="filter-btn" data-filter="contra">ACTION</button>
+        <button class="filter-btn" data-filter="rpg">RPG</button>
+      </div>
+    </div>
+    <div id="games-count">Loading games...</div>
+
+    <div class="games-grid" id="games-grid"></div>
+  </div>
+</main>
+
+<!-- Game detail modal -->
+<div class="game-modal-bg" id="gameModal" role="dialog" aria-modal="true">
+  <div class="game-modal">
+    <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <img id="modalImg" src="" alt=""/>
+    <h2 id="modalTitle"></h2>
+    <p id="modalDesc"></p>
+    <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
+      <a id="modalArchive" href="#" target="_blank" rel="noopener noreferrer" class="nes-btn" style="font-size:7px;">📦 ARCHIVE.ORG</a>
+      <a id="modalYT" href="#" target="_blank" rel="noopener noreferrer" class="nes-btn green" style="font-size:7px;">▶ GAMEPLAY VIDEO</a>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <p>
+    Box art images from <a href="https://archive.org/details/nes_classic_box_art" target="_blank" rel="noopener noreferrer">Archive.org NES Classic Box Art (USA) 742 Covers</a>.<br>
+    All game characters &amp; artwork © their respective publishers. Fan tribute — not for commercial use.<br>
+    <a href="index.html">🏠 Home</a> | <a href="videos.html">🎬 Videos</a> | <a href="game-genie.html">🕹️ Game Genie</a>
+  </p>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+(function(){
+  'use strict';
+  // Base URL for Archive.org NES box art collection
+  const BASE = 'https://archive.org/download/nes_classic_box_art/NES%20Box%20Art%20%28USA%29%20742%20Covers/';
+  const ARCHIVE_ITEM = 'https://archive.org/details/nes_classic_box_art';
+
+  // Comprehensive NES games list with box art filenames (matching Archive.org collection)
+  const GAMES = [
+    {name:"1943 - The Battle of Midway",     file:"1943 - The Battle of Midway (USA).jpg",    genre:"action",  desc:"WWII aerial combat. Fly the P-38 Lightning against Japanese forces. Up to 32 stages of intense air battle over the Pacific."},
+    {name:"Abadox",                           file:"Abadox (USA).jpg",                         genre:"action",  desc:"Sci-fi shooter. Navigate inside a living planet to rescue a princess swallowed whole by the planet organism PARASITIS."},
+    {name:"Adv. of Bayou Billy",              file:"Adventures of Bayou Billy, The (USA).jpg", genre:"action",  desc:"Beat 'em up / shooter hybrid set in the Louisiana bayou. Billy West fights to rescue his girlfriend from crime boss Godfather Gordon."},
+    {name:"Battletoads",                      file:"Battletoads (USA).jpg",                    genre:"action",  desc:"One of the hardest games ever made. Three mutant toads battle through 12 brutal levels of brawling, racing, and acrobatics."},
+    {name:"Bionic Commando",                  file:"Bionic Commando (USA).jpg",                genre:"action",  desc:"The only action game where you CANNOT jump! Use your extendable bionic arm to swing through levels and defeat the enemy."},
+    {name:"Blaster Master",                   file:"Blaster Master (USA).jpg",                 genre:"action",  desc:"Drive the SOPHIA III tank through underground caverns. Switch between vehicle and on-foot combat to solve this epic adventure."},
+    {name:"Castlevania",                      file:"Castlevania (USA).jpg",                    genre:"action",  desc:"Simon Belmont battles through Dracula's castle wielding a whip. Gothic atmosphere, brilliant level design, and iconic music."},
+    {name:"Castlevania II",                   file:"Castlevania II - Simon's Quest (USA).jpg", genre:"rpg",     desc:"Simon Belmont must gather Dracula's body parts to break a curse. Combines Castlevania action with RPG exploration elements."},
+    {name:"Castlevania III",                  file:"Castlevania III - Dracula's Curse (USA).jpg",genre:"action",desc:"The prequel. Play as Trevor Belmont with switchable companions. Multiple paths through Transylvania toward Dracula's castle."},
+    {name:"Chip 'n Dale Rescue Rangers",      file:"Chip 'n Dale Rescue Rangers (USA).jpg",    genre:"action",  desc:"Platformer based on the Disney cartoon. Chip and Dale battle Fat Cat to rescue a kidnapped baby mouse."},
+    {name:"Contra",                           file:"Contra (USA).jpg",                         genre:"action",  desc:"THE NES shooter classic. Up Down Left Right Left Right B A — 30 lives! Fight through jungles, waterfalls, and alien bases."},
+    {name:"DuckTales",                        file:"DuckTales (USA).jpg",                      genre:"action",  desc:"Scrooge McDuck pogo-sticks his way to riches across the Moon, Transylvania, Amazon and more. Capcom's Disney masterpiece."},
+    {name:"Excitebike",                       file:"Excitebike (USA).jpg",                     genre:"sports",  desc:"Motocross racing with a track editor. Manage your engine heat while performing jumps and dodging other riders. A launch title classic."},
+    {name:"Final Fantasy",                    file:"Final Fantasy (USA).jpg",                  genre:"rpg",     desc:"The game that saved Square from bankruptcy. Four Warriors of Light embark on an epic quest to restore four elemental crystals."},
+    {name:"Ghosts 'n Goblins",                file:"Ghosts 'n Goblins (USA).jpg",              genre:"action",  desc:"One of gaming's hardest classics. Arthur rescues Princess Guinevere from Satan. After beating it, you must play through AGAIN."},
+    {name:"Ice Hockey",                       file:"Ice Hockey (USA).jpg",                     genre:"sports",  desc:"Nintendo's classic ice hockey game with customizable team builds — thin/fast players, heavy/strong players, or balanced ones."},
+    {name:"Kirby's Adventure",                file:"Kirby's Adventure (USA).jpg",              genre:"action",  desc:"Kirby's incredible NES swansong. Copy abilities from swallowed enemies across 8 colorful worlds. Pushes NES hardware to its limits."},
+    {name:"Kung Fu",                          file:"Kung Fu (USA).jpg",                        genre:"action",  desc:"Thomas rescues his girlfriend Sylvia from Mister X. One of the earliest NES beat 'em ups with five floors of enemies to defeat."},
+    {name:"Legend of Zelda",                  file:"Legend of Zelda, The (USA).jpg",           genre:"zelda",   desc:"The original open-world adventure. Explore Hyrule, collect Triforce pieces, and rescue Princess Zelda from Ganon. Enter ZELDA for 2nd quest!"},
+    {name:"Mega Man",                         file:"Mega Man (USA).jpg",                       genre:"mega",    desc:"Dr. Light's robot fights Dr. Wily's Robot Masters. Choose any of 6 bosses in any order. Defeat them to steal their weapons."},
+    {name:"Mega Man 2",                       file:"Mega Man 2 (USA).jpg",                     genre:"mega",    desc:"The best Mega Man. 8 robot masters, iconic music, and the most polished NES action platformer ever made. Metal Blade OP!"},
+    {name:"Mega Man 3",                       file:"Mega Man 3 (USA).jpg",                     genre:"mega",    desc:"Introduces Rush the robotic dog and slide move. Features the return of Mega Man 2 stages. Proto Man appears as a rival."},
+    {name:"Metal Gear",                       file:"Metal Gear (USA).jpg",                     genre:"action",  desc:"Hideo Kojima's stealth classic. Solid Snake infiltrates Outer Heaven to destroy the bipedal nuclear weapon: Metal Gear."},
+    {name:"Metroid",                          file:"Metroid (USA).jpg",                        genre:"action",  desc:"Samus Aran explores the alien planet Zebes to stop Space Pirates from weaponizing the Metroids. Reveal Samus is a woman after beating it fast!"},
+    {name:"Mike Tyson's Punch-Out!!",         file:"Mike Tyson's Punch-Out!! (USA).jpg",       genre:"sports",  desc:"Little Mac fights through Glass Joe, Bald Bull, and the greatest boxer ever — Mike Tyson himself. 007-373-5963 to skip to Tyson!"},
+    {name:"Ninja Gaiden",                     file:"Ninja Gaiden (USA).jpg",                   genre:"action",  desc:"Ryu Hayabusa's cinematic NES adventure. Exceptional cutscenes tell a gripping ninja story through 6 challenging acts."},
+    {name:"Ninja Gaiden II",                  file:"Ninja Gaiden II - The Dark Sword of Chaos (USA).jpg",genre:"action",desc:"Ryu faces the Dark Sword of Chaos and an evil sorcerer. Introduces shadow clones ability. Even more cinematic than the first."},
+    {name:"Punch-Out!!",                      file:"Punch-Out!! (USA).jpg",                    genre:"sports",  desc:"The re-released version without Mike Tyson, featuring Mr. Dream as the final boss. Same incredible boxing gameplay."},
+    {name:"RC Pro-Am",                        file:"R.C. Pro-Am (USA).jpg",                    genre:"sports",  desc:"Rare's top-down RC car racer. Race across 32 tracks collecting power-ups and weapons to take down rival drivers."},
+    {name:"Rad Racer",                        file:"Rad Racer (USA).jpg",                      genre:"sports",  desc:"Square's F-Zero-like racer. Race an F1 car or Ferrari 328 through 8 stages. Supports the 3D glasses accessory!"},
+    {name:"River City Ransom",                file:"River City Ransom (USA).jpg",              genre:"action",  desc:"Beat 'em up RPG hybrid. Alex and Ryan battle gangs to rescue kidnapped students. Buy food and books to upgrade stats!"},
+    {name:"Rygar",                            file:"Rygar (USA).jpg",                          genre:"action",  desc:"Legendary Warrior Rygar battles monsters using a spiked diskarmor on a chain. Combines action with light RPG elements."},
+    {name:"Section Z",                        file:"Section Z (USA).jpg",                      genre:"action",  desc:"Capcom's side-scrolling and vertical shooting hybrid. Blast through 60 sections to reach the alien base and destroy L-Brain."},
+    {name:"SMB Lost Levels",                  file:"Super Mario Bros. 2 (Japan) (USA).jpg",    genre:"mario",   desc:"The TRUE Super Mario Bros. 2 (Japan). Brutal difficulty, wind mechanics, and Luigi's floaty jump. Originally not released in USA."},
+    {name:"Super Mario Bros.",                file:"Super Mario Bros. (USA).jpg",              genre:"mario",   desc:"THE game that saved the video game industry. World 1-1. The flagpole. Warp zones. Bowser. The mushroom. The greatest game ever made."},
+    {name:"Super Mario Bros. 2",              file:"Super Mario Bros. 2 (USA).jpg",            genre:"mario",   desc:"Mario, Luigi, Toad, and Peach battle Wart in Subcon. Pick up and throw enemies and vegetables. Originally Doki Doki Panic in Japan."},
+    {name:"Super Mario Bros. 3",              file:"Super Mario Bros. 3 (USA).jpg",            genre:"mario",   desc:"The greatest NES game ever made. Raccoon tail, frog suit, hammer suit, warp whistles, and the most content on an NES cartridge."},
+    {name:"TMNT",                             file:"Teenage Mutant Ninja Turtles (USA).jpg",   genre:"action",  desc:"The Turtles rescue April and Splinter in this notoriously difficult but beloved NES classic. The underwater bomb section is infamous."},
+    {name:"TMNT II: Arcade",                  file:"Teenage Mutant Ninja Turtles II - The Arcade Game (USA).jpg",genre:"action",desc:"The NES port of the beloved arcade beat 'em up. 4 Turtles fight through Shredder's Foot Clan. Pizza power!"},
+    {name:"Tecmo Super Bowl",                 file:"Tecmo Super Bowl (USA).jpg",               genre:"sports",  desc:"The greatest football game of the NES era. Bo Jackson runs through entire teams. Contains real NFL teams and players!"},
+    {name:"Tetris",                           file:"Tetris (USA).jpg",                         genre:"puzzle",  desc:"The perfect puzzle game. Drop tetrominoes, complete lines, and watch the haunting Type-A music drive you to higher levels. Endlessly addictive."},
+    {name:"Tiny Toon Adventures",             file:"Tiny Toon Adventures (USA).jpg",           genre:"action",  desc:"Based on the Spielberg/WB cartoon series. Buster Bunny and friends battle Montana Max. One of Konami's best NES platformers."},
+    {name:"Top Gun",                          file:"Top Gun (USA).jpg",                        genre:"action",  desc:"The NES game based on the Tom Cruise film. Fly the F-14 Tomcat in aerial combat. The carrier landing is legendarily difficult."},
+    {name:"Zelda II: Adventure of Link",      file:"Zelda II - The Adventure of Link (USA).jpg",genre:"zelda",  desc:"The radical sequel. Side-scrolling action RPG. Level up Link's attack, magic, and life. Shadow Link haunts you in the final dungeon."},
+  ];
+
+  const grid  = document.getElementById('games-grid');
+  const modal = document.getElementById('gameModal');
+  const count = document.getElementById('games-count');
+  let   activeFilter = 'all';
+  let   searchQuery  = '';
+
+  function render() {
+    const filtered = GAMES.filter(g => {
+      const matchFilter = activeFilter === 'all' || g.genre === activeFilter ||
+        (activeFilter === 'mario' && g.genre === 'mario') ||
+        (activeFilter === 'zelda' && g.genre === 'zelda') ||
+        (activeFilter === 'mega'  && g.genre === 'mega')  ||
+        (activeFilter === 'contra'&& g.genre === 'action') ||
+        (activeFilter === 'rpg'   && g.genre === 'rpg');
+      const matchSearch = !searchQuery || g.name.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchFilter && matchSearch;
+    });
+
+    count.textContent = `SHOWING ${filtered.length} OF ${GAMES.length} GAMES`;
+
+    grid.innerHTML = filtered.map((g, i) => {
+      const imgUrl = BASE + encodeURIComponent(g.file);
+      return `<div class="game-card" data-idx="${GAMES.indexOf(g)}" role="button" tabindex="0" aria-label="${g.name}">
+        <img src="${imgUrl}" alt="${g.name}" loading="lazy"
+             onerror="this.style.display='none';this.nextSibling.style.height='120px'"/>
+        <div class="game-name">${g.name.toUpperCase()}</div>
+      </div>`;
+    }).join('');
+
+    // Click handlers
+    grid.querySelectorAll('.game-card').forEach(card => {
+      const open = () => openModal(parseInt(card.dataset.idx));
+      card.addEventListener('click', open);
+      card.addEventListener('keydown', e => { if (e.key === 'Enter') open(); });
+    });
+  }
+
+  function openModal(idx) {
+    const g = GAMES[idx];
+    if (!g) return;
+    const imgUrl = BASE + encodeURIComponent(g.file);
+    document.getElementById('modalImg').src    = imgUrl;
+    document.getElementById('modalImg').alt    = g.name;
+    document.getElementById('modalTitle').textContent = g.name.toUpperCase();
+    document.getElementById('modalDesc').textContent  = g.desc;
+    document.getElementById('modalArchive').href = ARCHIVE_ITEM;
+    document.getElementById('modalYT').href = `https://www.youtube.com/results?search_query=${encodeURIComponent(g.name + ' NES gameplay')}`;
+    modal.classList.add('open');
+    document.getElementById('modalClose').focus();
+  }
+
+  document.getElementById('modalClose').addEventListener('click', () => modal.classList.remove('open'));
+  modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+
+  // Search
+  document.getElementById('game-search').addEventListener('input', e => {
+    searchQuery = e.target.value;
+    render();
+  });
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      render();
+    });
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

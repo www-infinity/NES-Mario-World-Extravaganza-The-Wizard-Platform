@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <title>The Legend of Zelda – NES Mario World Extravaganza</title>
+  <meta name="description" content="Play a fan-made Legend of Zelda canvas game. Full-screen NES Zelda tribute with overworld, enemies, sword combat and on-screen controls."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" media="print" onload="this.media='all'"/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗡️</text></svg>"/>
+  <style>
+    /* ── Full-viewport game section ── */
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:#000;overflow-x:hidden;}
+
+    /* Thin sticky nav over the game */
+    .zelda-nav{
+      position:fixed;top:0;left:0;width:100%;height:40px;
+      background:rgba(0,0,0,0.85);
+      border-bottom:2px solid #fcfc00;
+      display:flex;align-items:center;gap:4px;
+      padding:0 8px;z-index:200;
+      font-family:'Press Start 2P',monospace;font-size:7px;
+    }
+    .zelda-nav a{
+      color:#fcfc00;text-decoration:none;padding:4px 8px;
+      border:1px solid #444;transition:background 0.1s;white-space:nowrap;
+    }
+    .zelda-nav a:hover{background:#333;color:#fff;}
+    .zelda-nav .z-title{color:#f8d858;margin-right:8px;font-size:8px;white-space:nowrap;}
+
+    /* ── Game section — full viewport ── */
+    #game-section{
+      position:relative;
+      width:100vw;height:100vh;
+      overflow:hidden;
+      background:#000;
+    }
+
+    #zeldaCanvas{
+      display:block;position:absolute;inset:0;
+      width:100%;height:100%;
+      cursor:crosshair;
+    }
+
+    /* ── On-screen D-pad ── */
+    #dpad{
+      position:absolute;bottom:16px;left:0;right:0;
+      display:flex;align-items:flex-end;justify-content:space-between;
+      padding:0 16px;z-index:100;
+      pointer-events:none;
+    }
+
+    .dpad-cross{
+      display:grid;grid-template-columns:48px 48px 48px;
+      grid-template-rows:48px 48px 48px;gap:2px;
+      pointer-events:auto;
+    }
+
+    .dpad-btn{
+      background:rgba(0,0,0,0.7);
+      border:2px solid rgba(255,255,255,0.4);
+      color:#fcfc00;
+      font-family:'Press Start 2P',monospace;
+      font-size:14px;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;user-select:none;
+      -webkit-tap-highlight-color:transparent;
+      border-radius:4px;
+      transition:background 0.05s;
+      pointer-events:auto;
+    }
+    .dpad-btn:active,.dpad-btn.pressed{background:rgba(252,252,0,0.3);border-color:#fcfc00;}
+    .dpad-center{background:rgba(0,0,0,0.3);border:2px solid rgba(255,255,255,0.1);}
+
+    .action-btns{
+      display:flex;flex-direction:column;gap:8px;align-items:flex-end;
+      pointer-events:auto;
+    }
+
+    .action-btn{
+      width:56px;height:56px;
+      background:rgba(200,0,0,0.8);
+      border:3px solid rgba(255,255,255,0.5);
+      border-radius:50%;
+      color:#fff;font-family:'Press Start 2P',monospace;font-size:7px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+      cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+      pointer-events:auto;
+    }
+    .action-btn:active{transform:scale(0.92);background:rgba(200,0,0,1);}
+    .action-btn.start-btn{background:rgba(80,80,80,0.9);border-radius:8px;width:64px;height:28px;}
+
+    /* ── Scroll-down hint ── */
+    .scroll-hint{
+      position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+      color:rgba(252,252,0,0.6);font-family:'Press Start 2P',monospace;font-size:6px;
+      animation:bounce 2s ease-in-out infinite;pointer-events:none;z-index:100;
+      white-space:nowrap;
+    }
+    @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(-6px);}}
+
+    /* ── Below-fold content ── */
+    .below-fold{
+      background:#0d0d2b;
+      font-family:'Press Start 2P',monospace;
+    }
+
+    /* YouTube embed */
+    .yt-section{
+      max-width:900px;margin:0 auto;padding:48px 16px 32px;
+    }
+    .yt-title{
+      color:#f8d858;font-size:clamp(10px,2vw,16px);text-align:center;
+      margin-bottom:8px;text-shadow:3px 3px 0 #8c3c00;
+    }
+    .yt-subtitle{color:#aaa;font-size:7px;text-align:center;margin-bottom:24px;line-height:2;}
+    .yt-embed-wrap{
+      position:relative;padding-bottom:56.25%;height:0;overflow:hidden;
+      border:4px solid #fcfc00;box-shadow:6px 6px 0 #000;
+    }
+    .yt-embed-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+
+    /* Info grid */
+    .info-section{max-width:1100px;margin:0 auto;padding:32px 16px 48px;}
+    .info-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-top:24px;}
+    .info-card{
+      background:#1a1a3e;border:3px solid #fff;padding:16px;
+      box-shadow:4px 4px 0 #000;
+    }
+    .info-card h3{color:#fcfc00;font-size:8px;margin-bottom:10px;border-bottom:2px solid #444;padding-bottom:6px;}
+    .info-card p,.info-card li{font-size:7px;color:#fff;line-height:2.2;}
+    .info-card ul{padding-left:14px;}
+    .info-card ul li::marker{color:#d80000;}
+
+    .section-heading{
+      color:#fcfc00;font-size:clamp(9px,2vw,14px);text-align:center;
+      margin:32px 0 16px;text-shadow:2px 2px 0 #8c3c00;
+    }
+    .section-heading::before,.section-heading::after{content:'►';color:#d80000;margin:0 10px;}
+
+    /* Zelda history timeline */
+    .timeline{display:flex;flex-direction:column;gap:16px;max-width:800px;margin:0 auto;}
+    .timeline-item{
+      display:flex;gap:16px;align-items:flex-start;
+      background:#1a1a3e;border-left:4px solid #fcfc00;padding:12px 16px;
+    }
+    .timeline-year{color:#fcfc00;font-size:10px;min-width:60px;flex-shrink:0;margin-top:2px;}
+    .timeline-text{font-size:7px;color:#fff;line-height:2.2;}
+
+    /* Controls reference */
+    .controls-ref{
+      max-width:600px;margin:0 auto 32px;
+      background:#000;border:3px solid #fcfc00;padding:20px;
+    }
+    .controls-ref h3{color:#fcfc00;font-size:9px;text-align:center;margin-bottom:16px;}
+    .controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;}
+    .ctrl-row{display:flex;align-items:center;gap:8px;}
+    .ctrl-key{background:#333;border:2px solid #666;padding:2px 6px;color:#fcfc00;font-size:7px;}
+    .ctrl-desc{font-size:7px;color:#aaa;}
+
+    /* Footer */
+    .zelda-footer{
+      background:#000;border-top:4px solid #d80000;
+      text-align:center;padding:24px 16px;
+    }
+    .zelda-footer p{font-size:6px;color:#666;line-height:2.5;}
+    .zelda-footer a{color:#fcfc00;}
+
+    /* Responsive */
+    @media(max-width:480px){
+      .dpad-btn{width:44px;height:44px;font-size:12px;}
+      .dpad-cross{grid-template-columns:44px 44px 44px;grid-template-rows:44px 44px 44px;}
+      .action-btn{width:50px;height:50px;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Fixed nav ─────────────────────────────────────────────────────── -->
+<nav class="zelda-nav" aria-label="Site navigation">
+  <span class="z-title">🗡️ ZELDA</span>
+  <a href="index.html">🏠 HOME</a>
+  <a href="videos.html">🎬 VIDEOS</a>
+  <a href="game-genie.html">🕹️ GENIE</a>
+  <a href="gallery.html">🖼️ GALLERY</a>
+  <a href="game-builder.html">🔨 BUILD</a>
+  <a href="ai.html">🤖 AI</a>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     GAME SECTION — fills the entire first screen
+     ═══════════════════════════════════════════════════════════════════ -->
+<section id="game-section" aria-label="Zelda Game">
+  <canvas id="zeldaCanvas" role="img" aria-label="The Legend of Zelda canvas game"></canvas>
+
+  <!-- On-screen D-pad controller -->
+  <div id="dpad" aria-hidden="true">
+    <!-- D-pad cross -->
+    <div class="dpad-cross">
+      <div></div>
+      <button class="dpad-btn" id="btn-up"    aria-label="Move up">▲</button>
+      <div></div>
+      <button class="dpad-btn" id="btn-left"  aria-label="Move left">◄</button>
+      <div class="dpad-center"></div>
+      <button class="dpad-btn" id="btn-right" aria-label="Move right">►</button>
+      <div></div>
+      <button class="dpad-btn" id="btn-down"  aria-label="Move down">▼</button>
+      <div></div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="action-btns">
+      <button class="action-btn start-btn" id="btn-start" aria-label="Start/Pause">START</button>
+      <button class="action-btn" id="btn-sword" aria-label="Sword attack">
+        🗡️<span style="font-size:6px">SWORD</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="scroll-hint">▼ SCROLL FOR VIDEO &amp; STORY ▼</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BELOW FOLD — visible on scroll
+     ═══════════════════════════════════════════════════════════════════ -->
+<div class="below-fold">
+
+  <!-- YouTube video -->
+  <div class="yt-section">
+    <h2 class="yt-title">🎵 ZELDA'S LULLABY — LIVE PERFORMANCE</h2>
+    <p class="yt-subtitle">
+      The iconic music of Hyrule performed live — composed by Koji Kondo for The Legend of Zelda series
+    </p>
+    <div class="yt-embed-wrap">
+      <iframe
+        src="https://www.youtube.com/embed/La8h8_J-66Y"
+        title="Zelda's Lullaby live performance"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
+    </div>
+  </div>
+
+  <!-- Controls reference -->
+  <div class="info-section">
+    <div class="controls-ref">
+      <h3>🎮 GAME CONTROLS</h3>
+      <div class="controls-grid">
+        <div class="ctrl-row"><span class="ctrl-key">↑↓←→</span><span class="ctrl-desc">Move Link</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">WASD</span><span class="ctrl-desc">Move Link</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">Z / X</span><span class="ctrl-desc">Sword Attack</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">SPACE</span><span class="ctrl-desc">Sword Attack</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">P / ESC</span><span class="ctrl-desc">Pause</span></div>
+        <div class="ctrl-row"><span class="ctrl-key">D-PAD</span><span class="ctrl-desc">Touch controls</span></div>
+      </div>
+    </div>
+
+    <!-- Game tips -->
+    <h2 class="section-heading">GAME TIPS &amp; SECRETS</h2>
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>🗺️ THE OVERWORLD</h3>
+        <p>
+          Explore 5 screens connected in a + pattern. Walk off any edge to travel to adjacent screens.
+          North has rocky hills with Moblins. West has a lake with Octoroks.
+          East has a cave. South leads to the dungeon entrance!
+        </p>
+      </div>
+      <div class="info-card">
+        <h3>💎 RUPEES</h3>
+        <ul>
+          <li>Green rupee = 1 rupee</li>
+          <li>Blue rupee = 5 rupees</li>
+          <li>Red rupee = 20 rupees</li>
+          <li>Yellow rupee = 100 rupees!</li>
+          <li>Defeat Moblins for 5 rupees each</li>
+          <li>Find the dungeon staircase for a bonus</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>⚔️ ENEMIES</h3>
+        <p>
+          <strong style="color:#fcfc00">Octorok</strong> — Red blob. Shoots projectiles toward Link.
+          Move to dodge and slash with your sword.<br><br>
+          <strong style="color:#fcfc00">Moblin</strong> — Purple warrior with lance.
+          Pursues Link relentlessly. Takes 2 sword hits to defeat. Worth 5 rupees!
+        </p>
+      </div>
+      <div class="info-card">
+        <h3>❤️ HEALTH</h3>
+        <p>
+          You start with 3 hearts (6 HP). Collect heart pickups to restore health.
+          After taking damage you have 1.5 seconds of invincibility (Link flickers).
+          Octorok projectiles deal 1 HP damage. Moblin contact deals 1 HP damage.
+        </p>
+      </div>
+    </div>
+
+    <!-- Zelda history timeline -->
+    <h2 class="section-heading">THE LEGEND OF ZELDA — HISTORY</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <span class="timeline-year">1986</span>
+        <p class="timeline-text">
+          <strong style="color:#fcfc00">The Legend of Zelda</strong> launches on Famicom Disk System in Japan.
+          Shigeru Miyamoto and Takashi Tezuka create an open-world adventure unlike anything before.
+          The golden cartridge becomes iconic. Players explore Hyrule, collect Triforce pieces, and save Princess Zelda.
+        </p>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-year">1987</span>
+        <p class="timeline-text">
+          <strong style="color:#fcfc00">Zelda II: The Adventure of Link</strong> introduces side-scrolling battles,
+          experience points, and magic spells. A bold departure that divides fans but expands the lore.
+        </p>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-year">1991</span>
+        <p class="timeline-text">
+          <strong style="color:#fcfc00">A Link to the Past</strong> (SNES) perfects the Zelda formula —
+          Light World / Dark World duality, Master Sword, and the definitive Hyrule map.
+          Widely considered one of the greatest games ever made.
+        </p>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-year">1998</span>
+        <p class="timeline-text">
+          <strong style="color:#fcfc00">Ocarina of Time</strong> (N64) becomes the highest-rated game of all time.
+          Z-targeting combat, fully 3D Hyrule, and Koji Kondo's orchestral score set a new standard for games.
+        </p>
+      </div>
+      <div class="timeline-item">
+        <span class="timeline-year">2017</span>
+        <p class="timeline-text">
+          <strong style="color:#fcfc00">Breath of the Wild</strong> (Switch) reinvents open-world gaming.
+          Climb any surface, cook food, glide with a paraglider. Over 30 million copies sold.
+          Won Game of the Year at virtually every major awards ceremony.
+        </p>
+      </div>
+    </div>
+
+    <!-- Koji Kondo music section -->
+    <h2 class="section-heading">🎵 KOJI KONDO &amp; THE MUSIC OF HYRULE</h2>
+    <div class="info-grid">
+      <div class="info-card">
+        <h3>🎼 THE OVERWORLD THEME</h3>
+        <p>
+          The original Zelda overworld theme uses the NES's square wave channels to create
+          an adventurous, exploratory feel. Kondo wrote it to make players feel the vastness
+          of Hyrule in just a few bars of music.
+        </p>
+      </div>
+      <div class="info-card">
+        <h3>🌙 ZELDA'S LULLABY</h3>
+        <p>
+          First composed for A Link to the Past, Zelda's Lullaby became the most recognized
+          Nintendo melody after the Mario theme. The ascending triplet motif appears in every
+          mainline Zelda game in some form. It was performed at hundreds of live concerts worldwide.
+        </p>
+      </div>
+      <div class="info-card">
+        <h3>🎺 OCARINA OF TIME</h3>
+        <p>
+          The ocarina in-game was inspired by real folk instruments. Players learned to play
+          Zelda's Lullaby, Saria's Song, the Song of Time, and many more — each with a specific
+          musical effect on the game world. Music as a game mechanic was revolutionary.
+        </p>
+      </div>
+      <div class="info-card">
+        <h3>🏰 LIVE PERFORMANCES</h3>
+        <p>
+          "The Legend of Zelda: Symphony of the Goddesses" toured the world from 2012–2019,
+          performing Zelda music with full orchestras. Tickets sold out in minutes.
+          Kondo himself has appeared at several performances to thunderous applause.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="zelda-footer">
+    <p>
+      THE LEGEND OF ZELDA FAN TRIBUTE — Part of the NES Mario World Extravaganza Platform<br>
+      The Legend of Zelda, Link, Hyrule, and all related characters are trademarks of Nintendo Co., Ltd.<br>
+      This is a fan-made tribute. Not affiliated with Nintendo.<br>
+      Music video: <a href="https://www.youtube.com/watch?v=La8h8_J-66Y" target="_blank" rel="noopener noreferrer">youtube.com/watch?v=La8h8_J-66Y</a><br>
+      <br>
+      <a href="index.html">🏠 Back to Home</a> &nbsp;|&nbsp;
+      <a href="videos.html">🎬 Videos</a> &nbsp;|&nbsp;
+      <a href="game-genie.html">🕹️ Game Genie</a> &nbsp;|&nbsp;
+      <a href="game-builder.html">🔨 Build a Game</a>
+    </p>
+  </footer>
+</div>
+
+<script src="js/zelda.js"></script>
+</body>
+</html>

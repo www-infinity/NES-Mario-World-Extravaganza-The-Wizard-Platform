@@ -7,13 +7,34 @@
   <meta name="description" content="NES Mario World Extravaganza: The Wizard Platform – free NES gaming, vintage cartoons, image gallery, Game Genie codes, and game builder." />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍄</text></svg>" />
+  <style>
+    /* 3D hero canvas behind the header */
+    .hero-3d-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    #canvas-3d {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    .hero-3d-wrap > *:not(#canvas-3d) {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
 </head>
 <body>
 
 <!-- ============================================================
      HEADER
      ============================================================ -->
-<header class="site-header">
+<header class="site-header hero-3d-wrap">
+  <!-- Infinity-Graphics 3D WebGL background rendered here -->
+  <canvas id="canvas-3d" aria-hidden="true"></canvas>
   <div class="mario-sprite-wrap" aria-hidden="true">
     <!-- CSS pixel art Mario hat icon -->
     <span style="font-size:40px;" title="It's-a me, Mario!">🍄</span>
@@ -49,10 +70,13 @@
 <nav class="main-nav" aria-label="Main navigation">
   <ul>
     <li><a href="index.html" class="active">🏠 HOME</a></li>
+    <li><a href="zelda.html">🗡️ ZELDA GAME</a></li>
     <li><a href="videos.html">🎬 MOVIES &amp; CARTOONS</a></li>
     <li><a href="gallery.html">🖼️ GALLERY</a></li>
-    <li><a href="game-genie.html">🎮 GAME GENIE</a></li>
+    <li><a href="games.html">🎮 NES GAMES</a></li>
+    <li><a href="game-genie.html">🕹️ GAME GENIE</a></li>
     <li><a href="game-builder.html">🔨 GAME BUILDER</a></li>
+    <li><a href="ai.html">🤖 AI STUDIO</a></li>
   </ul>
 </nav>
 
@@ -133,6 +157,38 @@
         </p>
         <br>
         <span class="nes-btn blue" style="font-size:7px;">ENTER ▶</span>
+      </a>
+
+      <a href="zelda.html" class="nes-card" style="text-decoration:none; display:block;">
+        <h3>🗡️ ZELDA GAME</h3>
+        <p>
+          Play a full NES-style Legend of Zelda fan tribute — right in your browser!
+          Walk the overworld, fight Octoroks &amp; Moblins, collect rupees, find the dungeon.
+          On-screen D-pad for mobile.
+        </p>
+        <br>
+        <span class="nes-btn" style="background:var(--nes-yellow);color:#000;font-size:7px;">PLAY ▶</span>
+      </a>
+
+      <a href="games.html" class="nes-card" style="text-decoration:none; display:block;">
+        <h3>🎮 NES GAMES LIBRARY</h3>
+        <p>
+          742 NES game box art covers from Archive.org. Browse every classic NES title
+          with descriptions, tips, and links to legally free resources.
+        </p>
+        <br>
+        <span class="nes-btn purple" style="font-size:7px;">BROWSE ▶</span>
+      </a>
+
+      <a href="ai.html" class="nes-card" style="text-decoration:none; display:block;">
+        <h3>🤖 AI STUDIO</h3>
+        <p>
+          Powered by www-infinity/Infinity-Graphics — generate NES color palettes,
+          get design suggestions, run the 3D WebGL renderer, and apply pixel effects
+          to build your own Nintendo-inspired graphics.
+        </p>
+        <br>
+        <span class="nes-btn purple" style="font-size:7px;">ENTER ▶</span>
       </a>
 
     </div>

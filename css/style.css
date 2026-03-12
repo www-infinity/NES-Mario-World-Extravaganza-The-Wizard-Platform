@@ -703,3 +703,46 @@ a:hover { color: var(--nes-orange); text-shadow: 0 0 8px var(--nes-yellow); }
   from { transform: translateY(60px); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
 }
+
+/* ---- Video grid (videos.html) ---- */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin: 24px 0;
+}
+.video-card {
+  background: var(--bg-mid);
+  border: 3px solid var(--nes-gray);
+}
+.video-card > div:first-child {
+  border-bottom: 2px solid var(--nes-gray);
+}
+.video-info {
+  padding: 12px;
+}
+.video-info h3 {
+  color: var(--nes-yellow);
+  font-size: 8px;
+  margin-bottom: 8px;
+}
+.video-info p {
+  font-size: 7px;
+  color: #ccc;
+  line-height: 2;
+  margin-bottom: 10px;
+}
+
+/* ---- Extended buttons ---- */
+.nes-btn.purple {
+  background: var(--nes-purple);
+  border-color: var(--nes-pink);
+  color: var(--nes-white);
+}
+.nes-btn.purple:hover { background: #9a00e8; }
+
+/* ---- Hero variants ---- */
+.hero-wizard {
+  background: linear-gradient(180deg, #0d0d2b 0%, #1a1a3e 50%, #2a2a5e 100%);
+  border-bottom: 4px solid var(--nes-yellow);
+}
