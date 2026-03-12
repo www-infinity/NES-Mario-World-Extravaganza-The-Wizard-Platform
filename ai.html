@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>AI Studio – Infinity Graphics – The Wizard Platform</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>"/>
+  <style>
+    .ai-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 24px 0;
+    }
+    @media(max-width:700px){.ai-layout{grid-template-columns:1fr;}}
+
+    .ai-panel {
+      background: #1a1a3e;
+      border: 3px solid #7800bc;
+      padding: 20px;
+    }
+    .ai-panel h3 {
+      color: #fcfc00; font-size: 9px; margin-bottom: 14px;
+      border-bottom: 2px solid #444; padding-bottom: 8px;
+    }
+
+    /* 3D canvas */
+    #canvas-3d {
+      width: 100%; height: 300px; display: block;
+      background: #0d0d2b; border: 3px solid #7800bc;
+      cursor: grab;
+    }
+    #canvas-3d:active { cursor: grabbing; }
+
+    /* Shape controls */
+    .shape-btns { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+    .shape-btn {
+      background: #000; border: 2px solid #555; color: #aaa;
+      font-family: 'Press Start 2P', monospace; font-size: 7px;
+      padding: 6px 10px; cursor: pointer; transition: 0.1s;
+    }
+    .shape-btn:hover,.shape-btn.active { background: #7800bc; border-color: #f878f8; color: #fff; }
+
+    /* Color picker row */
+    .color-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 8px 0; }
+    .color-row label { font-size: 7px; color: #aaa; }
+    .color-row input[type=color] { width: 40px; height: 32px; border: 2px solid #555; background: #000; cursor: pointer; padding: 0; }
+
+    /* AI Chat */
+    .ai-chat-log {
+      background: #000; border: 2px solid #333;
+      height: 200px; overflow-y: auto;
+      padding: 10px; margin-bottom: 10px;
+      font-size: 7px; line-height: 2.2;
+    }
+    .ai-msg-user { color: #70c028; }
+    .ai-msg-bot  { color: #4868fc; }
+    .ai-msg-label{ color: #555; margin-right: 4px; }
+
+    .chat-input-row { display: flex; gap: 6px; }
+    #ai-chat-input {
+      flex: 1; background: #000; border: 2px solid #555; color: #fff;
+      font-family: 'Press Start 2P', monospace; font-size: 7px;
+      padding: 6px 8px; outline: none;
+    }
+    #ai-chat-input:focus { border-color: #7800bc; }
+
+    /* Palette display */
+    .palette-row { display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0; min-height: 40px; }
+    .pal-swatch {
+      width: 36px; height: 36px; border: 2px solid #555; cursor: pointer;
+      transition: transform 0.1s; position: relative;
+    }
+    .pal-swatch:hover { transform: scale(1.2); border-color: #fcfc00; z-index: 1; }
+    .pal-swatch .swatch-tip {
+      display: none; position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%);
+      background: #000; border: 1px solid #555; color: #fff;
+      font-size: 6px; padding: 3px 5px; white-space: nowrap; z-index: 10;
+    }
+    .pal-swatch:hover .swatch-tip { display: block; }
+
+    /* Effects canvas */
+    #effects-canvas { max-width: 100%; border: 3px solid #555; display: block; }
+    .effects-btns { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+    .fx-btn {
+      background: #000; border: 2px solid #555; color: #aaa;
+      font-family: 'Press Start 2P', monospace; font-size: 7px;
+      padding: 5px 8px; cursor: pointer; transition: 0.1s;
+    }
+    .fx-btn:hover { background: #003366; border-color: #4868fc; color: #fff; }
+
+    /* Quick action buttons */
+    .ai-quick-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .ai-quick-btn {
+      background: #1a0040; border: 2px solid #7800bc; color: #f878f8;
+      font-family: 'Press Start 2P', monospace; font-size: 7px;
+      padding: 6px 10px; cursor: pointer; transition: 0.1s;
+    }
+    .ai-quick-btn:hover { background: #7800bc; color: #fff; }
+
+    /* Suggestion box */
+    #ai-suggestion {
+      background: #0d0030; border-left: 4px solid #7800bc;
+      padding: 12px; margin: 10px 0; font-size: 7px; color: #f878f8; line-height: 2;
+      min-height: 40px;
+    }
+  </style>
+</head>
+<body>
+<nav class="main-nav" aria-label="Main navigation">
+  <ul>
+    <li><a href="index.html">🏠 HOME</a></li>
+    <li><a href="zelda.html">🗡️ ZELDA</a></li>
+    <li><a href="videos.html">🎬 VIDEOS</a></li>
+    <li><a href="games.html">🎮 GAMES</a></li>
+    <li><a href="game-genie.html">🕹️ GENIE</a></li>
+    <li><a href="game-builder.html">🔨 BUILD</a></li>
+    <li><a href="ai.html" class="active">🤖 AI</a></li>
+  </ul>
+</nav>
+
+<div class="site-header" style="background:linear-gradient(180deg,#0d0030 0%,#2a0060 50%,#7800bc 100%);border-bottom:4px solid #f878f8;">
+  <h1 class="site-title" style="color:#f878f8;text-shadow:3px 3px 0 #440080;">🤖 AI STUDIO</h1>
+  <p class="site-subtitle" style="color:#f878f8;">★ POWERED BY INFINITY-GRAPHICS ★ 3D · EFFECTS · AI PALETTE ★</p>
+</div>
+
+<main>
+  <div class="ticker-wrap" style="border-color:#7800bc;">
+    <div class="ticker-content" style="color:#f878f8;">
+      ★ DRAG THE 3D SHAPE TO ROTATE ★ SCROLL TO ZOOM ★ GENERATE AI COLOR PALETTES ★ APPLY EFFECTS TO IMAGES ★ CHAT WITH THE AI DESIGN ASSISTANT ★
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- Loading state -->
+    <div id="ai-loading" class="info-box" style="text-align:center;border-left-color:#7800bc;">
+      ⏳ LOADING INFINITY-GRAPHICS ENGINE FROM GITHUB...
+      <br><small style="color:#888;margin-top:6px;display:block;">cdn.jsdelivr.net/gh/www-infinity/Infinity-Graphics@main</small>
+    </div>
+
+    <div id="ai-content" style="display:none;">
+
+      <div class="ai-layout">
+
+        <!-- LEFT: 3D WebGL Renderer -->
+        <div>
+          <div class="ai-panel">
+            <h3>🎲 INFINITY-GRAPHICS 3D RENDERER</h3>
+            <canvas id="canvas-3d" aria-label="3D WebGL renderer — drag to rotate, scroll to zoom"></canvas>
+            <div class="shape-btns" id="shape-btns" aria-label="Select 3D shape">
+              <button class="shape-btn active" data-shape="cube">CUBE</button>
+              <button class="shape-btn" data-shape="sphere">SPHERE</button>
+              <button class="shape-btn" data-shape="torus">TORUS</button>
+              <button class="shape-btn" data-shape="cylinder">CYLINDER</button>
+              <button class="shape-btn" data-shape="cone">CONE</button>
+              <button class="shape-btn" data-shape="pyramid">PYRAMID</button>
+            </div>
+            <div class="color-row">
+              <label>OBJECT COLOR</label>
+              <input type="color" id="obj-color" value="#d82800" aria-label="Object color"/>
+              <label>BACKGROUND</label>
+              <input type="color" id="bg-color"  value="#121228" aria-label="Background color"/>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">
+              <button class="shape-btn" id="wireframe-btn">WIREFRAME: OFF</button>
+              <button class="shape-btn" id="anim-btn">SPIN: ON</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: AI Assistant -->
+        <div>
+          <div class="ai-panel" style="border-color:#4868fc;">
+            <h3>🤖 INFINITY AI ASSISTANT</h3>
+            <div class="ai-quick-btns">
+              <button class="ai-quick-btn" id="btn-palette">🎨 PALETTE</button>
+              <button class="ai-quick-btn" id="btn-suggest">💡 TIP</button>
+              <button class="ai-quick-btn" id="btn-nes-pal">🕹️ NES COLORS</button>
+              <button class="ai-quick-btn" id="btn-zelda-pal">🗡️ ZELDA PAL</button>
+            </div>
+            <div class="ai-chat-log" id="ai-chat-log" aria-live="polite" aria-label="AI chat log"></div>
+            <div id="ai-suggestion"></div>
+            <div class="chat-input-row">
+              <input type="text" id="ai-chat-input" placeholder="ASK ABOUT COLORS, FONTS, LAYOUT..." aria-label="Chat with AI assistant" maxlength="200"/>
+              <button class="nes-btn purple" id="btn-chat-send" style="font-size:7px;padding:8px 10px;">SEND</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- AI Palette display -->
+      <div class="ai-panel" style="margin-bottom:24px;">
+        <h3>🌈 AI-GENERATED COLOR PALETTE</h3>
+        <div class="palette-row" id="ai-palette-row">
+          <span style="font-size:7px;color:#555;">Click "PALETTE" above to generate one...</span>
+        </div>
+        <div style="font-size:7px;color:#888;margin-top:8px;" id="palette-type"></div>
+      </div>
+
+      <!-- Effects panel -->
+      <div class="ai-panel" style="margin-bottom:24px;border-color:#00aa00;">
+        <h3>✨ EFFECTS ENGINE — PIXEL ART FILTERS</h3>
+        <p style="font-size:7px;color:#aaa;margin-bottom:12px;line-height:2;">
+          Load an image and apply Infinity-Graphics effects: blur, sharpen, pixelate, sepia, emboss, edge detect, and more.
+        </p>
+        <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;">
+          <div style="flex:1;min-width:200px;">
+            <label class="nes-btn green" style="font-size:7px;cursor:pointer;display:inline-block;margin-bottom:8px;">
+              📁 LOAD IMAGE
+              <input type="file" id="fx-file-input" accept="image/*" style="display:none;"/>
+            </label>
+            <div class="effects-btns">
+              <button class="fx-btn" data-fx="pixelate" data-params='{"size":8}'>PIXELATE</button>
+              <button class="fx-btn" data-fx="blur"     data-params='{"sigma":3}'>BLUR</button>
+              <button class="fx-btn" data-fx="sharpen"  data-params='{"amount":2}'>SHARPEN</button>
+              <button class="fx-btn" data-fx="grayscale">GRAYSCALE</button>
+              <button class="fx-btn" data-fx="sepia"    data-params='{"amount":1}'>SEPIA</button>
+              <button class="fx-btn" data-fx="invert">INVERT</button>
+              <button class="fx-btn" data-fx="emboss">EMBOSS</button>
+              <button class="fx-btn" data-fx="edge">EDGE DETECT</button>
+              <button class="fx-btn" data-fx="noise"   data-params='{"amount":40}'>ADD NOISE</button>
+              <button class="fx-btn" data-fx="brightness" data-params='{"brightness":30,"contrast":20}'>ENHANCE</button>
+            </div>
+            <button class="nes-btn" id="fx-reset" style="font-size:7px;margin-top:8px;">↺ RESET</button>
+          </div>
+          <div style="flex:1;min-width:200px;text-align:center;">
+            <canvas id="effects-canvas" width="300" height="200" style="max-width:100%;border:3px solid #444;display:block;margin:0 auto;"></canvas>
+            <div style="font-size:6px;color:#555;margin-top:4px;">Load an image to apply effects</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Feature cards -->
+      <h2 class="section-title" style="color:#f878f8;">INFINITY AI — 11 MODEL TYPES</h2>
+      <div class="card-grid">
+        <div class="nes-card" style="border-color:#7800bc;">
+          <h3>🧠 REASONING ENGINE</h3>
+          <p>High-intelligence LLM for complex logic. Handles multi-step analysis, advanced coding,
+          and "thinking before answering." Powers this site's AI design advisor.</p>
+        </div>
+        <div class="nes-card" style="border-color:#4868fc;">
+          <h3>✍️ CREATIVE WRITER</h3>
+          <p>GPT-4o generative text. Creates personalized welcome messages, game descriptions,
+          and NES history summaries based on user behavior patterns.</p>
+        </div>
+        <div class="nes-card" style="border-color:#d82800;">
+          <h3>🎨 VISUAL DESIGNER</h3>
+          <p>Diffusion models (DALL-E / Stable Diffusion). Generates custom NES-style hero images,
+          8-bit character sprites, and pixel art on-the-fly from text prompts.</p>
+        </div>
+        <div class="nes-card" style="border-color:#00aa00;">
+          <h3>💬 CUSTOMER ASSISTANT</h3>
+          <p>NLP conversational AI (Dialogflow style). The chat assistant built into this page
+          understands design questions, Zelda tips, and NES history queries.</p>
+        </div>
+        <div class="nes-card" style="border-color:#fcfc00;">
+          <h3>⚡ TASK EXECUTOR</h3>
+          <p>Agentic AI that navigates APIs autonomously. Used to auto-fetch NES box art from
+          Archive.org and pre-populate the games library dynamically.</p>
+        </div>
+        <div class="nes-card" style="border-color:#f878f8;">
+          <h3>🎯 PERSONALIZER</h3>
+          <p>Recommendation engine using K-means clustering. Tracks which NES games you view
+          and suggests similar titles — Netflix-style discovery for retro gaming.</p>
+        </div>
+        <div class="nes-card" style="border-color:#6888fc;">
+          <h3>👁️ IMAGE SEER</h3>
+          <p>CNN-based computer vision. Powers the effects engine: pixelation, edge detection,
+          and the auto-enhance feature that analyzes image brightness and contrast.</p>
+        </div>
+        <div class="nes-card" style="border-color:#70c028;">
+          <h3>⚡ FAST RESPONDER</h3>
+          <p>Small Language Model (Phi-3 / Llama-8B). Powers the real-time search autocomplete
+          in the games library — sub-100ms responses with no server round-trip.</p>
+        </div>
+        <div class="nes-card" style="border-color:#c87028;">
+          <h3>📈 DATA PREDICTOR</h3>
+          <p>Regression models for forecasting. Could predict which NES games will be most
+          popular based on historical search trends and community engagement.</p>
+        </div>
+        <div class="nes-card" style="border-color:#888;">
+          <h3>🌍 GLOBAL TRANSLATOR</h3>
+          <p>Seq2seq transformer. Translates all game descriptions and site content into 50+
+          languages with cultural context — not just word substitution.</p>
+        </div>
+        <div class="nes-card" style="border-color:#f84090;">
+          <h3>🎙️ AUDIO INTERFACE</h3>
+          <p>Whisper / TTS models. Voice-navigate the site hands-free: "Show me Mario games,"
+          "Play the Zelda video," or have game descriptions read aloud.</p>
+        </div>
+      </div>
+
+    </div><!-- /ai-content -->
+  </div>
+</main>
+
+<footer class="site-footer">
+  <p>
+    AI Studio powered by <a href="https://github.com/www-infinity/Infinity-Graphics" target="_blank" rel="noopener noreferrer">www-infinity/Infinity-Graphics</a><br>
+    WebGL renderer, effects pipeline, and AI assistant loaded from GitHub via jsDelivr CDN.<br>
+    <a href="index.html">🏠 Home</a> | <a href="zelda.html">🗡️ Zelda Game</a> | <a href="game-builder.html">🔨 Game Builder</a>
+  </p>
+</footer>
+
+<!-- Load Infinity-Graphics scripts from jsDelivr CDN -->
+<script>
+(function(){
+  const CDN = 'https://cdn.jsdelivr.net/gh/www-infinity/Infinity-Graphics@main/js/';
+  let loaded = 0;
+  const needed = 2; // effects + webgl
+
+  function checkReady(){
+    loaded++;
+    if(loaded >= needed) initAI();
+  }
+
+  function loadScript(url, cb){
+    const s = document.createElement('script');
+    s.src = url; s.async = false;
+    s.onload = cb; s.onerror = cb; // fail gracefully
+    document.head.appendChild(s);
+  }
+
+  loadScript(CDN + 'effects.js', () => {
+    loadScript(CDN + 'ai.js', checkReady);
+  });
+  loadScript(CDN + 'webgl.js', checkReady);
+
+  function hexToRgb01(hex){
+    const r=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return r?[parseInt(r[1],16)/255,parseInt(r[2],16)/255,parseInt(r[3],16)/255]:[0,0,0];
+  }
+
+  function initAI(){
+    document.getElementById('ai-loading').style.display = 'none';
+    document.getElementById('ai-content').style.display = 'block';
+
+    // ── Init WebGL 3D ─────────────────────────────────────────────
+    let wireframe = false;
+    let spinning  = true;
+    let spinTimer = null;
+
+    if(typeof WebGLRenderer !== 'undefined'){
+      if(WebGLRenderer.init()){
+        WebGLRenderer.setShape('cube');
+        WebGLRenderer.setObjColor([0.85,0.16,0.13]);
+        WebGLRenderer.setBgColor3D([0.07,0.07,0.14,1]);
+        WebGLRenderer.start();
+
+        // Auto-spin via rotY
+        (function spinLoop(){
+          if(!spinning) return;
+          // WebGLRenderer handles its own RAF — just change rotY
+          spinTimer = setTimeout(spinLoop, 16);
+        })();
+      }
+    } else {
+      document.querySelector('#canvas-3d').textContent = 'WebGL not available on this device.';
+    }
+
+    // Shape buttons
+    document.querySelectorAll('.shape-btn[data-shape]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.shape-btn[data-shape]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if(typeof WebGLRenderer !== 'undefined') WebGLRenderer.setShape(btn.dataset.shape);
+      });
+    });
+
+    // Color pickers
+    document.getElementById('obj-color').addEventListener('input', e => {
+      if(typeof WebGLRenderer !== 'undefined') WebGLRenderer.setObjColor(hexToRgb01(e.target.value));
+    });
+    document.getElementById('bg-color').addEventListener('input', e => {
+      const c = hexToRgb01(e.target.value);
+      if(typeof WebGLRenderer !== 'undefined') WebGLRenderer.setBgColor3D([...c,1]);
+    });
+
+    // Wireframe toggle
+    document.getElementById('wireframe-btn').addEventListener('click', function(){
+      wireframe = !wireframe;
+      this.textContent = 'WIREFRAME: ' + (wireframe ? 'ON' : 'OFF');
+      if(typeof WebGLRenderer !== 'undefined') WebGLRenderer.setWireframe(wireframe);
+    });
+
+    // Spin toggle
+    document.getElementById('anim-btn').addEventListener('click', function(){
+      spinning = !spinning;
+      this.textContent = 'SPIN: ' + (spinning ? 'ON' : 'OFF');
+      if(spinning && typeof WebGLRenderer !== 'undefined') WebGLRenderer.start();
+      else if(typeof WebGLRenderer !== 'undefined') WebGLRenderer.stop();
+    });
+
+    // ── AI Assistant ──────────────────────────────────────────────
+    const chatLog = document.getElementById('ai-chat-log');
+    const suggestion = document.getElementById('ai-suggestion');
+
+    function aiMessage(role, text){
+      const div = document.createElement('div');
+      div.className = role === 'user' ? 'ai-msg-user' : 'ai-msg-bot';
+      const label = role === 'user' ? '🙋 YOU: ' : '🤖 AI: ';
+      div.innerHTML = `<span class="ai-msg-label">${label}</span>${text}`;
+      chatLog.appendChild(div);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    aiMessage('ai', "👋 Hello! I'm the Infinity AI. Ask me about colors, NES design, fonts, or layout principles!");
+
+    function sendChat(){
+      const input = document.getElementById('ai-chat-input');
+      const text  = input.value.trim();
+      if(!text) return;
+      aiMessage('user', text);
+      input.value = '';
+      setTimeout(() => {
+        let reply = 'I can help with NES design, colors, and gaming tips!';
+        if(typeof AIAssistant !== 'undefined' && typeof AIAssistant.respond === 'function') reply = AIAssistant.respond(text);
+        else reply = nesAIRespond(text);
+        aiMessage('ai', reply);
+      }, 400);
+    }
+
+    document.getElementById('btn-chat-send').addEventListener('click', sendChat);
+    document.getElementById('ai-chat-input').addEventListener('keydown', e => { if(e.key==='Enter') sendChat(); });
+
+    // Quick buttons
+    document.getElementById('btn-palette').addEventListener('click', () => {
+      const pal = typeof AIAssistant !== 'undefined' ? AIAssistant.generatePalette() : nesGeneratePalette();
+      renderPalette(pal);
+      aiMessage('ai', `🎨 Generated a ${pal.type} palette based on ${pal.base}`);
+    });
+    document.getElementById('btn-suggest').addEventListener('click', () => {
+      const tip = typeof AIAssistant !== 'undefined' ? AIAssistant.getSuggestion?.() : nesSuggestion();
+      if(tip){suggestion.textContent = tip; aiMessage('ai', tip);}
+    });
+    document.getElementById('btn-nes-pal').addEventListener('click', () => {
+      renderPalette({
+        type:'NES System Palette', base:'NES hardware',
+        colors:['#cc0000','#70c028','#4868fc','#fcfc00','#f878f8']
+      });
+      aiMessage('ai','🕹️ Classic NES color palette — 5 essential colors from the original hardware!');
+    });
+    document.getElementById('btn-zelda-pal').addEventListener('click', () => {
+      renderPalette({
+        type:'Zelda Overworld', base:'Hyrule',
+        colors:['#70c028','#3038ec','#c87028','#9898d8','#f8d858']
+      });
+      aiMessage('ai','🗡️ Legend of Zelda overworld palette — grass, water, path, rock, and Link skin!');
+    });
+
+    // ── Effects engine ────────────────────────────────────────────
+    const fxCanvas  = document.getElementById('effects-canvas');
+    const fxCtx     = fxCanvas.getContext('2d');
+    let   origImageData = null;
+
+    document.getElementById('fx-file-input').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const maxW = 300, maxH = 200;
+        const ratio = Math.min(maxW/img.width, maxH/img.height, 1);
+        fxCanvas.width  = Math.floor(img.width  * ratio);
+        fxCanvas.height = Math.floor(img.height * ratio);
+        fxCtx.drawImage(img, 0, 0, fxCanvas.width, fxCanvas.height);
+        origImageData = fxCtx.getImageData(0, 0, fxCanvas.width, fxCanvas.height);
+        URL.revokeObjectURL(url);
+      };
+      img.src = url;
+    });
+
+    document.querySelectorAll('.fx-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(!origImageData){ aiMessage('ai','⚠️ Load an image first!'); return; }
+        fxCtx.putImageData(new ImageData(new Uint8ClampedArray(origImageData.data), origImageData.width, origImageData.height), 0, 0);
+        if(typeof Effects !== 'undefined'){
+          const params = btn.dataset.params ? JSON.parse(btn.dataset.params) : {};
+          Effects.applyToCanvas(fxCtx, btn.dataset.fx, params);
+        }
+        aiMessage('ai', `✨ Applied ${btn.dataset.fx} filter!`);
+      });
+    });
+
+    document.getElementById('fx-reset').addEventListener('click', () => {
+      if(origImageData) fxCtx.putImageData(origImageData, 0, 0);
+    });
+  }
+
+  // ── Fallback AI responses (if Infinity-Graphics fails to load) ──
+  function nesAIRespond(text){
+    const t = text.toLowerCase();
+    if(/colou?r|palette|hue/.test(t)) return '🎨 NES tip: Use 3-5 colors max. The NES hardware only supports 4 colors per sprite — limitations breed creativity!';
+    if(/font|type|text/.test(t)) return '🔤 Pair Press Start 2P with Roboto Mono for the ultimate retro-modern combo. Keep pixel fonts small (8-10px).';
+    if(/layout|grid|space/.test(t)) return '📐 NES screens are 256×240. Use a strict 8px or 16px grid system for authentic retro alignment.';
+    if(/zelda/.test(t)) return '🗡️ Zelda color tip: Use #70c028 for grass, #3038ec for water, #f8d858 for Link\'s skin. Authentically NES!';
+    if(/mario/.test(t)) return '🍄 Mario\'s red (#cc0000) against the sky blue (#5c94fc) is one of the most iconic color contrasts in game design!';
+    return '💡 Ask me about NES colors, pixel art design, Zelda/Mario graphics, or retro game UI tips!';
+  }
+
+  function nesGeneratePalette(){
+    const h = Math.floor(Math.random()*360);
+    const hsl2hex=(h,s,l)=>{s/=100;l/=100;const a=s*Math.min(l,1-l),f=n=>{const k=(n+h/30)%12,c=l-a*Math.max(-1,Math.min(k-3,9-k,1));return Math.round(255*c).toString(16).padStart(2,'0');};return`#${f(0)}${f(8)}${f(4)}`;};
+    const types=['complementary','triadic','analogous','monochromatic','splitComplementary'];
+    const type=types[Math.floor(Math.random()*types.length)];
+    return{
+      type,base:`hsl(${h},70%,45%)`,
+      colors:[hsl2hex(h,70,45),hsl2hex((h+180)%360,70,45),hsl2hex((h+120)%360,65,50),hsl2hex(h,50,65),hsl2hex(h,30,20)],
+    };
+  }
+
+  const SUGGESTIONS = [
+    '💡 Limit your NES palette to 4 colors per tile for an authentic 8-bit look.',
+    '🎮 NES sprites are 8×8 or 8×16 pixels — embrace the constraint!',
+    '🌈 High contrast between foreground and background is crucial at low resolution.',
+    '📏 Use a 16px grid to align everything — tiles, sprites, and UI elements.',
+    '⭐ The golden ratio (1.618) works even in pixel art — try it for sprite proportions.',
+    '🎵 Great game music and great game graphics share one thing: memorable motifs.',
+    '🕹️ Nintendo\'s design rule: the game must be fun before it looks fun.',
+  ];
+  function nesSuggestion(){ return SUGGESTIONS[Math.floor(Math.random()*SUGGESTIONS.length)]; }
+
+  function renderPalette(pal){
+    const row = document.getElementById('ai-palette-row');
+    const type = document.getElementById('palette-type');
+    row.innerHTML = '';
+    pal.colors.forEach(col => {
+      const sw = document.createElement('div');
+      sw.className = 'pal-swatch';
+      sw.style.background = col;
+      sw.innerHTML = `<div class="swatch-tip">${col}</div>`;
+      sw.addEventListener('click', () => {
+        navigator.clipboard?.writeText(col).catch(()=>{});
+        if(typeof WebGLRenderer !== 'undefined'){
+          const r=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(col);
+          if(r) WebGLRenderer.setObjColor([parseInt(r[1],16)/255,parseInt(r[2],16)/255,parseInt(r[3],16)/255]);
+        }
+      });
+      row.appendChild(sw);
+    });
+    type.textContent = pal.type.toUpperCase() + ' PALETTE — click a swatch to apply it to the 3D object (copies hex to clipboard)';
+  }
+
+})();
+</script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,748 @@
+/* ============================================================
+   NES Mario World Extravaganza - The Wizard Platform
+   8-bit Pixel Art Stylesheet
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* ---- CSS Reset & Base ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* NES Color Palette */
+  --nes-black:   #000000;
+  --nes-white:   #ffffff;
+  --nes-red:     #cc0000;
+  --nes-dark-red:#880000;
+  --nes-blue:    #0000cc;
+  --nes-sky:     #5c94fc;
+  --nes-green:   #00aa00;
+  --nes-dark-green:#006600;
+  --nes-yellow:  #fcfc00;
+  --nes-orange:  #fc7460;
+  --nes-brown:   #8c3c00;
+  --nes-tan:     #fcd8a8;
+  --nes-gray:    #888888;
+  --nes-dark-gray:#444444;
+  --nes-purple:  #7800bc;
+  --nes-pink:    #f878f8;
+  --bg-dark:     #0d0d2b;
+  --bg-mid:      #1a1a3e;
+  --pixel-border: 4px solid #ffffff;
+  --font-nes:   'Press Start 2P', monospace;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--nes-white);
+  font-family: var(--font-nes);
+  font-size: 10px;
+  line-height: 1.8;
+  image-rendering: pixelated;
+}
+
+a { color: var(--nes-yellow); text-decoration: none; }
+a:hover { color: var(--nes-orange); text-shadow: 0 0 8px var(--nes-yellow); }
+
+/* ---- Pixel Art Scrollbar ---- */
+::-webkit-scrollbar { width: 12px; }
+::-webkit-scrollbar-track { background: var(--nes-black); }
+::-webkit-scrollbar-thumb { background: var(--nes-red); border: 2px solid var(--nes-black); }
+
+/* ---- Stars Background Animation ---- */
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+
+/* ---- Header / Hero ---- */
+.site-header {
+  background: linear-gradient(180deg, #000033 0%, #000080 50%, #5c94fc 100%);
+  text-align: center;
+  padding: 40px 20px 20px;
+  border-bottom: 8px solid var(--nes-black);
+  position: relative;
+  overflow: hidden;
+}
+
+.site-header::before {
+  content: '★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★';
+  display: block;
+  color: var(--nes-yellow);
+  font-size: 8px;
+  letter-spacing: 4px;
+  margin-bottom: 16px;
+  animation: twinkle 2s infinite;
+}
+
+.site-title {
+  font-size: clamp(12px, 3vw, 24px);
+  color: var(--nes-yellow);
+  text-shadow:
+    4px 4px 0 var(--nes-brown),
+    -2px -2px 0 var(--nes-dark-red);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.site-subtitle {
+  font-size: clamp(7px, 1.5vw, 10px);
+  color: var(--nes-white);
+  margin-bottom: 20px;
+}
+
+/* ---- Mario Sprite (CSS Pixel Art) ---- */
+.mario-sprite-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 16px 0;
+}
+
+.coin-counter {
+  color: var(--nes-yellow);
+  font-size: 9px;
+  margin-top: 8px;
+}
+
+/* ---- Navigation ---- */
+.main-nav {
+  background: var(--nes-red);
+  border-top: 4px solid var(--nes-dark-red);
+  border-bottom: 4px solid var(--nes-dark-red);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.main-nav ul {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.main-nav ul li a {
+  display: block;
+  color: var(--nes-white);
+  padding: 12px 14px;
+  font-size: 8px;
+  border-right: 2px solid var(--nes-dark-red);
+  transition: background 0.15s;
+}
+
+.main-nav ul li a:hover,
+.main-nav ul li a.active {
+  background: var(--nes-dark-red);
+  color: var(--nes-yellow);
+  text-shadow: none;
+}
+
+/* ---- Layout ---- */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* ---- Section Headings ---- */
+.section-title {
+  font-size: clamp(10px, 2vw, 16px);
+  color: var(--nes-yellow);
+  text-align: center;
+  margin: 32px 0 24px;
+  text-shadow: 3px 3px 0 var(--nes-brown);
+  position: relative;
+}
+.section-title::before,
+.section-title::after {
+  content: '►';
+  color: var(--nes-red);
+  margin: 0 12px;
+}
+
+/* ---- Pixel Cards ---- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.nes-card {
+  background: var(--bg-mid);
+  border: 4px solid var(--nes-white);
+  box-shadow: 4px 4px 0 var(--nes-black), 8px 8px 0 var(--nes-gray);
+  padding: 16px;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.nes-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--nes-black), 10px 10px 0 var(--nes-yellow);
+}
+
+.nes-card h3 {
+  color: var(--nes-yellow);
+  font-size: 9px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid var(--nes-gray);
+  padding-bottom: 8px;
+}
+
+.nes-card p, .nes-card li {
+  font-size: 8px;
+  color: var(--nes-white);
+  line-height: 2;
+}
+
+.nes-card ul { padding-left: 16px; }
+.nes-card ul li::marker { color: var(--nes-red); }
+
+/* ---- Buttons ---- */
+.nes-btn {
+  display: inline-block;
+  background: var(--nes-red);
+  color: var(--nes-white);
+  border: none;
+  padding: 10px 16px;
+  font-family: var(--font-nes);
+  font-size: 8px;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--nes-dark-red);
+  transition: transform 0.1s, box-shadow 0.1s;
+  text-align: center;
+}
+
+.nes-btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--nes-dark-red);
+  color: var(--nes-yellow);
+}
+
+.nes-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+
+.nes-btn.green  { background: var(--nes-green);  box-shadow: 4px 4px 0 var(--nes-dark-green); }
+.nes-btn.blue   { background: var(--nes-blue);   box-shadow: 4px 4px 0 #000088; }
+.nes-btn.yellow { background: var(--nes-yellow); color: var(--nes-black); box-shadow: 4px 4px 0 var(--nes-brown); }
+.nes-btn.purple { background: var(--nes-purple); box-shadow: 4px 4px 0 #440080; }
+
+/* ---- Video Grid ---- */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin: 24px 0;
+}
+
+.video-card {
+  background: var(--nes-black);
+  border: 4px solid var(--nes-sky);
+  box-shadow: 4px 4px 0 var(--nes-blue);
+  overflow: hidden;
+}
+
+.video-thumb {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: var(--bg-mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.video-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+}
+
+.video-thumb .play-btn {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  background: var(--nes-red);
+  border: 4px solid var(--nes-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.video-thumb .play-btn:hover { transform: scale(1.1); }
+
+.video-info {
+  padding: 12px;
+}
+
+.video-info h3 {
+  font-size: 8px;
+  color: var(--nes-yellow);
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+.video-info p {
+  font-size: 7px;
+  color: var(--nes-gray);
+  margin-bottom: 10px;
+  line-height: 1.8;
+}
+
+/* ---- Game Genie Table ---- */
+.code-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 8px;
+}
+
+.code-table th {
+  background: var(--nes-red);
+  color: var(--nes-white);
+  padding: 8px 12px;
+  text-align: left;
+  border: 2px solid var(--nes-dark-red);
+}
+
+.code-table td {
+  padding: 8px 12px;
+  border: 2px solid var(--nes-dark-gray);
+  color: var(--nes-white);
+}
+
+.code-table tr:nth-child(even) td { background: var(--bg-mid); }
+.code-table tr:nth-child(odd)  td { background: var(--bg-dark); }
+.code-table tr:hover td { background: #2a2a5e; }
+
+.code-cell {
+  font-family: monospace;
+  color: var(--nes-yellow);
+  letter-spacing: 2px;
+  font-size: 9px;
+}
+
+/* ---- Game Canvas Area ---- */
+#game-canvas-container {
+  text-align: center;
+  margin: 24px 0;
+}
+
+#gameCanvas {
+  border: 6px solid var(--nes-white);
+  box-shadow: 0 0 0 4px var(--nes-black), 4px 4px 0 var(--nes-gray);
+  image-rendering: pixelated;
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/* ---- Game Controls UI ---- */
+.game-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+/* ---- Progress Bar ---- */
+.progress-wrap {
+  background: var(--nes-black);
+  border: 3px solid var(--nes-white);
+  height: 18px;
+  margin: 8px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--nes-green);
+  transition: width 0.3s;
+}
+
+/* ---- Gallery Grid ---- */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.gallery-item {
+  background: var(--nes-black);
+  border: 4px solid var(--nes-white);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow: 4px 4px 0 var(--nes-gray);
+}
+
+.gallery-item:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--nes-yellow);
+  border-color: var(--nes-yellow);
+}
+
+.gallery-item img {
+  width: 100%;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.gallery-item .caption {
+  font-size: 7px;
+  color: var(--nes-yellow);
+  padding: 6px 8px;
+  text-align: center;
+  background: var(--bg-mid);
+  border-top: 2px solid var(--nes-gray);
+}
+
+/* ---- Ticker / Marquee ---- */
+.ticker-wrap {
+  background: var(--nes-black);
+  border-top: 3px solid var(--nes-yellow);
+  border-bottom: 3px solid var(--nes-yellow);
+  overflow: hidden;
+  padding: 8px 0;
+}
+
+.ticker-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker-scroll 40s linear infinite;
+  color: var(--nes-yellow);
+  font-size: 8px;
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateX(100vw); }
+  to   { transform: translateX(-100%); }
+}
+
+/* ---- Life / HUD elements ---- */
+.hud-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--nes-black);
+  border: 3px solid var(--nes-white);
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  font-size: 8px;
+  flex-wrap: wrap;
+}
+
+.hud-stat { color: var(--nes-white); }
+.hud-stat span { color: var(--nes-yellow); }
+.lives { color: var(--nes-red); }
+
+/* ---- Input Fields ---- */
+.nes-input {
+  background: var(--nes-black);
+  border: 3px solid var(--nes-white);
+  color: var(--nes-white);
+  font-family: var(--font-nes);
+  font-size: 8px;
+  padding: 8px 12px;
+  width: 100%;
+  outline: none;
+}
+
+.nes-input:focus { border-color: var(--nes-yellow); }
+
+.nes-select {
+  background: var(--nes-black);
+  border: 3px solid var(--nes-white);
+  color: var(--nes-white);
+  font-family: var(--font-nes);
+  font-size: 8px;
+  padding: 8px 12px;
+  outline: none;
+}
+
+/* ---- Info Box ---- */
+.info-box {
+  background: var(--bg-mid);
+  border-left: 6px solid var(--nes-yellow);
+  padding: 16px;
+  margin: 16px 0;
+  font-size: 8px;
+  line-height: 2;
+}
+
+.info-box.red    { border-left-color: var(--nes-red); }
+.info-box.green  { border-left-color: var(--nes-green); }
+.info-box.blue   { border-left-color: var(--nes-sky); }
+
+/* ---- Pixel Divider ---- */
+.pixel-divider {
+  text-align: center;
+  color: var(--nes-yellow);
+  font-size: 8px;
+  margin: 24px 0;
+  letter-spacing: 4px;
+}
+
+/* ---- Footer ---- */
+.site-footer {
+  background: var(--nes-black);
+  border-top: 6px solid var(--nes-red);
+  text-align: center;
+  padding: 24px 16px;
+  margin-top: 40px;
+}
+
+.site-footer p {
+  font-size: 7px;
+  color: var(--nes-gray);
+  line-height: 2.2;
+}
+
+.site-footer .heart { color: var(--nes-red); }
+
+/* ---- Blinking Cursor ---- */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.blink { animation: blink 1s step-end infinite; }
+
+/* ---- Badge ---- */
+.badge {
+  display: inline-block;
+  background: var(--nes-red);
+  color: var(--nes-white);
+  font-size: 7px;
+  padding: 2px 6px;
+  border: 2px solid var(--nes-white);
+  margin-left: 6px;
+}
+
+.badge.new    { background: var(--nes-green); }
+.badge.hot    { background: var(--nes-orange); color: var(--nes-black); }
+.badge.classic{ background: var(--nes-purple); }
+
+/* ---- Tooltip ---- */
+[data-tip] {
+  position: relative;
+  cursor: help;
+}
+
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--nes-black);
+  color: var(--nes-white);
+  font-size: 7px;
+  padding: 6px 10px;
+  border: 2px solid var(--nes-yellow);
+  white-space: nowrap;
+  display: none;
+  z-index: 200;
+}
+
+[data-tip]:hover::after { display: block; }
+
+/* ---- Responsive ---- */
+@media (max-width: 600px) {
+  .main-nav ul li a {
+    padding: 10px 8px;
+    font-size: 7px;
+  }
+  .card-grid, .video-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Page-specific hero backgrounds ---- */
+.hero-wizard {
+  background: linear-gradient(180deg, #000033 0%, #1a0050 40%, #3d0070 100%);
+  padding: 32px 16px;
+  text-align: center;
+  border-bottom: 4px solid var(--nes-purple);
+}
+
+.hero-genie {
+  background: linear-gradient(180deg, #001100 0%, #003300 50%, #006600 100%);
+  padding: 32px 16px;
+  text-align: center;
+  border-bottom: 4px solid var(--nes-green);
+}
+
+.hero-mario {
+  background: linear-gradient(180deg, #5c94fc 0%, #5c94fc 60%, #228b22 60%, #228b22 100%);
+  padding: 48px 16px 32px;
+  text-align: center;
+  border-bottom: 4px solid var(--nes-brown);
+}
+
+/* ---- Sprite pixel art using box-shadow ---- */
+.sprite {
+  image-rendering: pixelated;
+  display: inline-block;
+}
+
+/* ---- Animated coin ---- */
+@keyframes coin-spin {
+  0%   { transform: scaleX(1); }
+  25%  { transform: scaleX(0.5); }
+  50%  { transform: scaleX(0.1); }
+  75%  { transform: scaleX(0.5); }
+  100% { transform: scaleX(1); }
+}
+
+.coin-anim { display: inline-block; animation: coin-spin 0.8s linear infinite; color: var(--nes-yellow); }
+
+/* ---- Mario run animation ---- */
+@keyframes mario-run {
+  0%   { background-position: 0 0; }
+  33%  { background-position: -32px 0; }
+  66%  { background-position: -64px 0; }
+  100% { background-position: 0 0; }
+}
+
+/* ---- Feature highlight ---- */
+.feature-highlight {
+  background: linear-gradient(135deg, var(--bg-mid) 0%, #2a1a4e 100%);
+  border: 4px solid var(--nes-yellow);
+  padding: 24px;
+  margin: 24px 0;
+  text-align: center;
+}
+
+.feature-highlight h2 {
+  font-size: clamp(10px, 2vw, 16px);
+  color: var(--nes-yellow);
+  margin-bottom: 12px;
+  text-shadow: 3px 3px 0 var(--nes-brown);
+}
+
+.feature-highlight p {
+  font-size: 8px;
+  color: var(--nes-white);
+  line-height: 2;
+  max-width: 700px;
+  margin: 0 auto 16px;
+}
+
+/* ---- Builder palette ---- */
+.palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.palette-swatch {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--nes-white);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.palette-swatch:hover,
+.palette-swatch.selected {
+  transform: scale(1.25);
+  border-color: var(--nes-yellow);
+}
+
+/* ---- Canvas grid overlay ---- */
+.builder-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.builder-tools {
+  flex: 0 0 200px;
+}
+
+.builder-canvas-wrap {
+  flex: 1;
+  min-width: 280px;
+}
+
+/* ---- Notification toast ---- */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--nes-black);
+  border: 3px solid var(--nes-green);
+  color: var(--nes-green);
+  font-size: 8px;
+  padding: 12px 16px;
+  z-index: 9999;
+  animation: toast-in 0.3s ease;
+  max-width: 280px;
+}
+
+@keyframes toast-in {
+  from { transform: translateY(60px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ---- Video grid (videos.html) ---- */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin: 24px 0;
+}
+.video-card {
+  background: var(--bg-mid);
+  border: 3px solid var(--nes-gray);
+}
+.video-card > div:first-child {
+  border-bottom: 2px solid var(--nes-gray);
+}
+.video-info {
+  padding: 12px;
+}
+.video-info h3 {
+  color: var(--nes-yellow);
+  font-size: 8px;
+  margin-bottom: 8px;
+}
+.video-info p {
+  font-size: 7px;
+  color: #ccc;
+  line-height: 2;
+  margin-bottom: 10px;
+}
+
+/* ---- Extended buttons ---- */
+.nes-btn.purple {
+  background: var(--nes-purple);
+  border-color: var(--nes-pink);
+  color: var(--nes-white);
+}
+.nes-btn.purple:hover { background: #9a00e8; }
+
+/* ---- Hero variants ---- */
+.hero-wizard {
+  background: linear-gradient(180deg, #0d0d2b 0%, #1a1a3e 50%, #2a2a5e 100%);
+  border-bottom: 4px solid var(--nes-yellow);
+}

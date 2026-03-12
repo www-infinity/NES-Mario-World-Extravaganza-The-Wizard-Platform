@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Game Genie Codes – NES – The Wizard Platform</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕹️</text></svg>"/>
+  <style>
+    .genie-hero { background: linear-gradient(180deg,#001100 0%,#003300 50%,#006600 100%); padding:40px 16px; text-align:center; border-bottom:4px solid var(--nes-green); }
+    .code-search { max-width: 500px; margin: 0 auto 24px; }
+    .code-search input {
+      width:100%;background:#000;border:3px solid var(--nes-green);color:#fff;
+      font-family:'Press Start 2P',monospace;font-size:8px;padding:10px 14px;outline:none;
+    }
+    .code-search input:focus { border-color: var(--nes-yellow); }
+    .game-section { margin-bottom: 40px; }
+    .game-section h3 {
+      color: var(--nes-yellow); font-size: 10px;
+      border-left: 4px solid var(--nes-green); padding: 8px 12px;
+      margin-bottom: 12px; background: rgba(0,100,0,0.15);
+    }
+    .code-table { width:100%; border-collapse:collapse; font-size:8px; margin-bottom:8px; }
+    .code-table th { background:#006600; color:#fff; padding:8px 12px; text-align:left; border:2px solid #004400; }
+    .code-table td { padding:8px 12px; border:2px solid #004400; color:#fff; }
+    .code-table tr:nth-child(even) td { background:rgba(0,80,0,0.2); }
+    .code-table tr:hover td { background:rgba(0,120,0,0.3); }
+    .code-cell { font-family:monospace; color:#70c028; letter-spacing:3px; font-size:10px; font-weight:bold; }
+    .copy-btn {
+      background:#006600;border:1px solid #008800;color:#70c028;
+      font-family:'Press Start 2P',monospace;font-size:6px;
+      padding:3px 6px;cursor:pointer;
+    }
+    .copy-btn:hover { background:#008800; color:#fff; }
+    .genie-diagram {
+      background:#000;border:3px solid var(--nes-green);padding:24px;
+      max-width:600px;margin:0 auto 32px;text-align:center;
+    }
+    .genie-diagram pre { font-family:monospace;font-size:9px;color:#70c028;line-height:1.8; }
+  </style>
+</head>
+<body>
+<nav class="main-nav" aria-label="Main navigation">
+  <ul>
+    <li><a href="index.html">🏠 HOME</a></li>
+    <li><a href="zelda.html">🗡️ ZELDA</a></li>
+    <li><a href="videos.html">🎬 VIDEOS</a></li>
+    <li><a href="gallery.html">🖼️ GALLERY</a></li>
+    <li><a href="games.html">🎮 GAMES</a></li>
+    <li><a href="game-genie.html" class="active">🕹️ GENIE</a></li>
+    <li><a href="game-builder.html">🔨 BUILD</a></li>
+    <li><a href="ai.html">🤖 AI</a></li>
+  </ul>
+</nav>
+
+<div class="genie-hero">
+  <h1 class="site-title" style="color:#70c028;">🕹️ GAME GENIE</h1>
+  <p class="site-subtitle" style="color:#70c028;">★ CODES ★ HISTORY ★ HOW IT WORKS ★ PRO TIPS ★</p>
+</div>
+
+<main>
+  <div class="ticker-wrap" style="border-color:var(--nes-green);">
+    <div class="ticker-content" style="color:#70c028;">
+      ★ GAME GENIE CREATED BY CODEMASTERS ★ SOLD BY GALOOB IN NORTH AMERICA ★ NINTENDO SUED GALOOB BUT LOST ★
+      CODES MODIFY GAME RAM IN REAL TIME ★ NO SAVE DATA IS ALTERED ★ OVER 1,000 CODES FOR NES GAMES ★
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- What is Game Genie -->
+    <h2 class="section-title" style="color:#70c028;">WHAT IS THE GAME GENIE?</h2>
+    <div class="card-grid">
+      <div class="nes-card" style="border-color:#006600;">
+        <h3 style="color:#70c028;">📜 HISTORY (1990)</h3>
+        <p>
+          The Game Genie was created by British developer Codemasters and sold in North America by Galoob.
+          It plugs between the NES cartridge and console, intercepting data on the address bus to modify
+          game values in real time. Nintendo sued Galoob in 1990 but lost — courts ruled it was legal
+          to modify games you own. Over 5 million units sold worldwide.
+        </p>
+      </div>
+      <div class="nes-card" style="border-color:#006600;">
+        <h3 style="color:#70c028;">⚙️ HOW IT WORKS</h3>
+        <p>
+          Each 6 or 8 character code maps to: an ADDRESS in game memory, a DATA value to insert,
+          and optionally a COMPARE value (8-char codes only) to verify before swapping.
+          The device watches the address bus. When the CPU reads the target address, Game Genie
+          returns your value instead of the cartridge's original value — all in hardware, real time.
+        </p>
+      </div>
+      <div class="nes-card" style="border-color:#006600;">
+        <h3 style="color:#70c028;">🔐 CODE FORMAT</h3>
+        <p>
+          Codes use letters A-Z and numbers 0-9 (no vowels except A and E).
+          6-character code = address + data. 8-character code = address + data + compare.
+          Each character encodes 4 bits. Decode: rearrange bits in a specific pattern
+          to get the 15-bit address and 8-bit data byte. Pure 1990s hardware ingenuity!
+        </p>
+      </div>
+      <div class="nes-card" style="border-color:#006600;">
+        <h3 style="color:#70c028;">✅ SAFETY</h3>
+        <p>
+          Game Genie codes are completely safe — they only modify values in the console's RAM
+          during gameplay. Your save data, cartridge battery, and hardware are never affected.
+          Codes deactivate the moment you power off. No permanent modifications of any kind.
+          Even Nintendo admitted in court that Game Genie causes no hardware damage.
+        </p>
+      </div>
+    </div>
+
+    <!-- Code decoder diagram -->
+    <h2 class="section-title" style="color:#70c028;">CODE DECODER</h2>
+    <div class="genie-diagram">
+      <p style="font-size:8px;color:#70c028;margin-bottom:12px;">EXAMPLE: SZKEAUVK (Contra — Infinite Lives)</p>
+      <pre>
+  S  Z  K  E  A  U  V  K
+  ↓  ↓  ↓  ↓  ↓  ↓  ↓  ↓
+  Each letter = 4-bit value
+  Rearranged → 15-bit ADDRESS
+  + 8-bit DATA VALUE
+  + 8-bit COMPARE VALUE
+  ↓
+  ADDRESS: $0075 (lives counter)
+  DATA:    $02   (set to 2)
+  COMPARE: $02   (only modify if current = 2)
+      </pre>
+      <p style="font-size:7px;color:#888;margin-top:8px;">Result: Lives never decrease below 2 — effectively infinite!</p>
+    </div>
+
+    <!-- Code search -->
+    <div class="code-search">
+      <input type="search" id="code-search" placeholder="SEARCH GAMES OR CODES..."/>
+    </div>
+
+    <div id="code-sections">
+
+    <!-- SUPER MARIO BROS -->
+    <div class="game-section" data-game="super mario bros">
+      <h3>🍄 SUPER MARIO BROS.</h3>
+      <table class="code-table">
+        <thead><tr><th>CODE</th><th>EFFECT</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="code-cell">SXIOPO</td><td>Infinite lives</td><td><button class="copy-btn" onclick="copyCode('SXIOPO')">COPY</button></td></tr>
+          <tr><td class="code-cell">AATPZZ</td><td>Moon jump (jump much higher)</td><td><button class="copy-btn" onclick="copyCode('AATPZZ')">COPY</button></td></tr>
+          <tr><td class="code-cell">GXSZTA</td><td>Fireballs kill any enemy</td><td><button class="copy-btn" onclick="copyCode('GXSZTA')">COPY</button></td></tr>
+          <tr><td class="code-cell">SXEZSK</td><td>Infinite time</td><td><button class="copy-btn" onclick="copyCode('SXEZSK')">COPY</button></td></tr>
+          <tr><td class="code-cell">OZSGPZVK</td><td>Start on World 5</td><td><button class="copy-btn" onclick="copyCode('OZSGPZVK')">COPY</button></td></tr>
+          <tr><td class="code-cell">AAOPUOZT</td><td>Start with 9 lives</td><td><button class="copy-btn" onclick="copyCode('AAOPUOZT')">COPY</button></td></tr>
+          <tr><td class="code-cell">PPOPYGLA</td><td>Invincibility star lasts forever</td><td><button class="copy-btn" onclick="copyCode('PPOPYGLA')">COPY</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SUPER MARIO BROS 2 -->
+    <div class="game-section" data-game="super mario bros 2">
+      <h3>🍄 SUPER MARIO BROS. 2</h3>
+      <table class="code-table">
+        <thead><tr><th>CODE</th><th>EFFECT</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="code-cell">SXKXZSAX</td><td>Infinite lives</td><td><button class="copy-btn" onclick="copyCode('SXKXZSAX')">COPY</button></td></tr>
+          <tr><td class="code-cell">PAOKTGAA</td><td>Start with 9 lives</td><td><button class="copy-btn" onclick="copyCode('PAOKTGAA')">COPY</button></td></tr>
+          <tr><td class="code-cell">AENPXOON</td><td>Never lose health from falls</td><td><button class="copy-btn" onclick="copyCode('AENPXOON')">COPY</button></td></tr>
+          <tr><td class="code-cell">PINSNTAP</td><td>Pick up anything instantly (no lag)</td><td><button class="copy-btn" onclick="copyCode('PINSNTAP')">COPY</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SUPER MARIO BROS 3 -->
+    <div class="game-section" data-game="super mario bros 3">
+      <h3>🍄 SUPER MARIO BROS. 3</h3>
+      <table class="code-table">
+        <thead><tr><th>CODE</th><th>EFFECT</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="code-cell">SLXPLOVS</td><td>Infinite lives</td><td><button class="copy-btn" onclick="copyCode('SLXPLOVS')">COPY</button></td></tr>
+          <tr><td class="code-cell">SZUEXKVS</td><td>Infinite time</td><td><button class="copy-btn" onclick="copyCode('SZUEXKVS')">COPY</button></td></tr>
+          <tr><td class="code-cell">KKKZSPIU</td><td>Always be Super Mario</td><td><button class="copy-btn" onclick="copyCode('KKKZSPIU')">COPY</button></td></tr>
+          <tr><td class="code-cell">OSTEOIAX</td><td>Raccoon Suit from any mushroom</td><td><button class="copy-btn" onclick="copyCode('OSTEOIAX')">COPY</button></td></tr>
+          <tr><td class="code-cell">TAOPOPGA</td><td>All items cost 1 coin in Toad house</td><td><button class="copy-btn" onclick="copyCode('TAOPOPGA')">COPY</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- THE LEGEND OF ZELDA -->
+    <div class="game-section" data-game="legend of zelda">
+      <h3>🗡️ THE LEGEND OF ZELDA</h3>
+      <table class="code-table">
+        <thead><tr><th>CODE</th><th>EFFECT</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="code-cell">AVVLAUSZ</td><td>Start with 16 hearts</td><td><button class="copy-btn" onclick="copyCode('AVVLAUSZ')">COPY</button></td></tr>
+          <tr><td class="code-cell">PAXKAAAA</td><td>Never lose rupees</td><td><button class="copy-btn" onclick="copyCode('PAXKAAAA')">COPY</button></td></tr>
+          <tr><td class="code-cell">AAAUINYA</td><td>Max rupees (255) on pickup</td><td><button class="copy-btn" onclick="copyCode('AAAUINYA')">COPY</button></td></tr>
+          <tr><td class="code-cell">SXNAKNSE</td><td>Infinite bombs</td><td><button class="copy-btn" onclick="copyCode('SXNAKNSE')">COPY</button></td></tr>
+          <tr><td class="code-cell">GZALAKVN</td><td>Walk through walls (careful!)</td><td><button class="copy-btn" onclick="copyCode('GZALAKVN')">COPY</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CONTRA -->
+    <div class="game-section" data-game="contra">
+      <h3>🔫 CONTRA</h3>
+      <table class="code-table">
+        <thead><tr><th>CODE</th><th>EFFECT</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="code-cell">SLAAAV</td><td>Infinite lives — the ultimate Contra code</td><td><button class="copy-btn" onclick="copyCode('SLAAAV')">COPY</button></td></tr>
+          <tr><td class="code-cell">SGEAAV</td><td>Infinite continues</td><td><button class="copy-btn" onclick="copyCode('SGEAAV')">COPY</button></td></tr>
+          <tr><td class="code-cell">AAKXGZPA</td><td>Start with 9 lives</td><td><button class="copy-btn" onclick="copyCode('AAKXGZPA')">COPY</button></td></tr>
+          <tr><td class="code-cell">GXKNTESE</td><td>Invincibility (cannot die)</td><td><button class="copy-btn" onclick="copyCode('GXKNTESE')">COPY</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- MEGA MAN 2 -->
+    <div class="game-section" data-game="mega man 2">
+      <h3>🤖 MEGA MAN 2</h3>
+      <table class="code-table">
+        <thead><tr><th>CODE</th><th>EFFECT</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="code-cell">SZSOOOVK</td><td>Infinite lives</td><td><button class="copy-btn" onclick="copyCode('SZSOOOVK')">COPY</button></td></tr>
+          <tr><td class="code-cell">AANSTZPA</td><td>Start with 9 lives</td><td><button class="copy-btn" onclick="copyCode('AANSTZPA')">COPY</button></td></tr>
+          <tr><td class="code-cell">GXNTXKVK</td><td>Full E-tank on pickup</td><td><button class="copy-btn" onclick="copyCode('GXNTXKVK')">COPY</button></td></tr>
+          <tr><td class="code-cell">AENLOPAL</td><td>Never lose weapons energy</td><td><button class="copy-btn" onclick="copyCode('AENLOPAL')">COPY</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CASTLEVANIA -->
+    <div class="game-section" data-game="castlevania">
+      <h3>🏰 CASTLEVANIA</h3>
+      <table class="code-table">
+        <thead><tr><th>CODE</th><th>EFFECT</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="code-cell">SXSZTLVG</td><td>Infinite lives</td><td><button class="copy-btn" onclick="copyCode('SXSZTLVG')">COPY</button></td></tr>
+          <tr><td class="code-cell">AENTELAP</td><td>Start with 9 lives</td><td><button class="copy-btn" onclick="copyCode('AENTELAP')">COPY</button></td></tr>
+          <tr><td class="code-cell">GXSSTLVG</td><td>Hearts never decrease</td><td><button class="copy-btn" onclick="copyCode('GXSSTLVG')">COPY</button></td></tr>
+          <tr><td class="code-cell">SZSTELVG</td><td>Infinite health</td><td><button class="copy-btn" onclick="copyCode('SZSTELVG')">COPY</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TMNT -->
+    <div class="game-section" data-game="teenage mutant ninja turtles">
+      <h3>🐢 TEENAGE MUTANT NINJA TURTLES</h3>
+      <table class="code-table">
+        <thead><tr><th>CODE</th><th>EFFECT</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="code-cell">SZNKAKVS</td><td>Infinite health for all turtles</td><td><button class="copy-btn" onclick="copyCode('SZNKAKVS')">COPY</button></td></tr>
+          <tr><td class="code-cell">OXKIUGVS</td><td>Never lose a life</td><td><button class="copy-btn" onclick="copyCode('OXKIUGVS')">COPY</button></td></tr>
+          <tr><td class="code-cell">AAKIUGPA</td><td>All turtles start at full health</td><td><button class="copy-btn" onclick="copyCode('AAKIUGPA')">COPY</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    </div><!-- /code-sections -->
+  </div>
+</main>
+
+<footer class="site-footer">
+  <p>
+    Game Genie was created by Codemasters and sold by Galoob (1990). All codes for educational purposes.<br>
+    Game trademarks © respective publishers. Fan tribute — not affiliated with Codemasters or Nintendo.<br>
+    <a href="index.html">🏠 Home</a> | <a href="zelda.html">🗡️ Zelda Game</a> | <a href="games.html">🎮 Games Library</a>
+  </p>
+</footer>
+
+<script src="js/app.js"></script>
+<script>
+function copyCode(code){
+  navigator.clipboard?.writeText(code).then(()=>{
+    if(typeof showToast==='function') showToast('📋 COPIED: ' + code, 'green');
+    else alert('Copied: ' + code);
+  }).catch(()=> alert('Code: ' + code));
+}
+// Search filter
+document.getElementById('code-search').addEventListener('input', function(){
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('.game-section').forEach(sec => {
+    const name = sec.dataset.game || '';
+    const codes = sec.querySelectorAll('.code-cell');
+    let show = name.includes(q);
+    codes.forEach(c => { if(c.textContent.toLowerCase().includes(q)) show = true; });
+    sec.style.display = (!q || show) ? '' : 'none';
+  });
+});
+</script>
+</body>
+</html>
